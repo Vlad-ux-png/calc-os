@@ -111,13 +111,17 @@ void input_wait_string(char *buffer) {
 	}
 }
 
-int compare_strings(char *s1, char *s2) {
-	int i = 0;
-	while (s1[i] != '\0' && s2[i] != '\0') {
-		if (s1[i] != s2[i]) return 0; 
-		i++;
-	}
-	return (s1[i] == s2[i]);
+int compare_strings(char *str1, char *str2) {
+    int i = 0;
+    
+    while (str1[i] == str2[i]) {
+        if (str1[i] == '\0') {
+            return 1;
+        }
+        i++;
+    }
+    
+    return 0;
 }
 
 void print_number(int n, char color) {
@@ -163,15 +167,15 @@ void run_calculator() {
 	print("\n----Caluclator----\n", 0x0B);
 	put_char(' ', 0x0F);
 
-	print("Enter first number: ", 7);
+	print("\nEnter first number: ", 7);
 	int first = input_wait_number();
 
-	print("Enter second number: ", 7);
+	print("\nEnter second number: ", 7);
 	int second = input_wait_number();
 
 	int result = first + second;
 
-	print("Result: ", 0x0A);
+	print("\nResult: ", 0x0A);
 
 	print_number(result, 0x0F);
 
@@ -184,7 +188,7 @@ void __attribute__((section(".text.entry"))) kernel_main() {
 	screen_clear();
 
 	while (1) {
-		print("CALC OS>", 0x0E);
+		print("\nCALC OS>", 0x0E);
 
 		input_wait_string(cmd); 
 
