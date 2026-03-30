@@ -188,7 +188,7 @@ void __attribute__((section(".text.entry"))) kernel_main() {
 	screen_clear();
 
 	while (1) {
-		print("\nCALC OS>", 0x0E);
+		print("\nCALC >", 0x02);
 
 		input_wait_string(cmd); 
 
@@ -196,7 +196,7 @@ void __attribute__((section(".text.entry"))) kernel_main() {
 			screen_clear();
 		}
 		else if (compare_strings(cmd, "help")) {
-			print("\nCommands: cls, help, calc\n", 0x07);
+			print("\nCommands: cls, help, calc\n", 0x0F);
 		}
 		else if (compare_strings(cmd, "calc")) {
 			run_calculator();
