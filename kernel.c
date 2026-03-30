@@ -1,4 +1,5 @@
 extern int get_scancode();
+extern void sys_halt();
 
 int cursor = 0;
 
@@ -196,10 +197,17 @@ void __attribute__((section(".text.entry"))) kernel_main() {
 			screen_clear();
 		}
 		else if (compare_strings(cmd, "help")) {
-			print("\nCommands: cls, help, calc\n", 0x0F);
+			print("\nCommands: cls, help, calc, info\n", 0x0F);
 		}
 		else if (compare_strings(cmd, "calc")) {
 			run_calculator();
+		}
+
+		else if (compare_strings(cmd, "info")) {
+			print("\nWhat new: added new comands\n", 0x0F);
+		}
+		else if (compare_strings(cmd, "exit")) {
+			sys_halt();
 		}
 		else {
 			print("\nBad command!\n", 0x04);
