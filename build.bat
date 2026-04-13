@@ -1,60 +1,48 @@
 @echo off
-set VBOX_PATH="C:\Program Files\Oracle\VirtualBox"
 
-echo [STEP 1] Compiling Bootloader...
-nasm -f bin stub.asm -o boot.bin
+nasm -f bin src/boot/stub.asm -o boot.bin
 
-echo [STEP 2] Compiling IO and Power (Assembly)...
-nasm -f elf32 io.asm -o io.o
-nasm -f elf32 power.asm -o power.o
+nasm -f elf32 src/arch/io.asm -o io.o
+echo done
+nasm -f elf32 src/arch/power.asm -o power.o
+echo done
+nasm -f elf32 src/arch/inout.asm -o inout.o
+echo done
+nasm -f elf32 src/arch/mouse.asm -o mouse.o
+echo done
 
-echo [STEP 3] Compiling C Code...
-gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -c kernel.c -o kernel.o
-:: gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -c lib/system.c -I./include -o system.o
-:: gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -c drivers/keyboard.c -I./include -o keyboard.o
-:: gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -c lib/programs.c -I./include -o programs.o
+gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c src/kernel/kernel.c -o kernel.o
+gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c src/c/disk.c -o disk.o
+gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c src/c/stdio.c -o stdio.o
+gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c src/c/mouse.c -o mouse2.o
+gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c src/c/utils.c -o utils.o
+gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c src/c/keyboard.c -o keyboard.o
 
-echo [STEP 4] Linking...
-ld -m i386pe -T linker.ld -o kernel.pe kernel.o io.o power.o
+ld -m i386pe -T linker.ld -o kernel.pe kernel.o disk.o stdio.o mouse2.o utils.o keyboard.o io.o power.o inout.o mouse.o
 
-echo [STEP 5] Converting to binary...
 objcopy -O binary kernel.pe kernel.bin
 
-echo [STEP 6] Building Image...
 if exist kernel.bin (
-    copy /b boot.bin + kernel.bin os-image.bin
-    echo [SUCCESS] os-image.bin created!
+    copy /b boot.bin + kernel.bin temp_image.bin
+    fsutil file createnew os-image.img 1474560
+    powershell -Command "$boot = [System.IO.File]::ReadAllBytes('temp_image.bin'); $image = [System.IO.File]::ReadAllBytes('os-image.img'); [System.Array]::Copy($boot, $image, $boot.Length); [System.IO.File]::WriteAllBytes('os-image.img', $image)"
+    del temp_image.bin
 ) else (
-    echo [ERROR] kernel.bin was not created!
-    del /s kernel.bin
-    del /s boot.bin
-    del /s kernel.pe
-    del /s power.o
-    del /s io.o
-    del /s kernel.o
-    del /s system.o
-    del /s os-image.bin
-    del /s programs.o
-    del /s keyboard.o
-    pause
-    exit /b
+    goto cleanup_error
 )
 
-echo [STEP 7] Creating VHD...
-if exist os-disk.vhd del os-disk.vhd
-fsutil file seteof os-image.bin 65536
-%VBOX_PATH%\VBoxManage.exe convertfromraw os-image.bin os-disk.vhd --format VHD
+qemu-system-i386 -drive format=raw,file=os-image.img
 
-echo [STEP 8] Cleaning up...
-del /s kernel.bin
-del /s keyboard.o
-del /s boot.bin
-del /s kernel.pe
-del /s power.o
-del /s io.o
-del /s kernel.o
-del /s system.o
-del /s programs.o
-del /s os-image.bin
-echo [DONE]
+:cleanup
+del *.o
+del kernel.pe
+del kernel.bin
+del boot.bin
+exit /b
+
+:cleanup_error
+del *.o
+del kernel.pe
+del boot.bin
 pause
+exit /b
