@@ -4,11 +4,23 @@
 #include <utils.h>
 #include <keyboard.h>
 
+#define APPS_START_SECTOR 150  
+#define MAX_APPS 16           
+#define APP_DATA_START 200
+
 struct File {
 	char name[32];
 	char content[476];
 	int exists;
 };
+
+struct App {
+	char name[32];
+	int start_lba;
+	int size_sectors;
+	int exists;
+};
+
 
 void ata_read_sector(int sector, unsigned short *buffer) {
 	outb(0x1F2, 1);

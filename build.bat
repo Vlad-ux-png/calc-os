@@ -4,7 +4,7 @@ nasm -f bin src/boot/stub.asm -o boot.bin
 
 nasm -f elf32 src/arch/io.asm -o io.o
 echo done
-nasm -f elf32 src/arch/power.asm -o power.o
+nasm -f bin src/arch/power.asm -o power.bin
 echo done
 nasm -f elf32 src/arch/inout.asm -o inout.o
 echo done
@@ -18,7 +18,7 @@ gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-
 gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c src/c/utils.c -o utils.o
 gcc -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c src/c/keyboard.c -o keyboard.o
 
-ld -m i386pe -T linker.ld -o kernel.pe kernel.o disk.o stdio.o mouse2.o utils.o keyboard.o io.o power.o inout.o mouse.o
+ld -m i386pe -T linker.ld -o kernel.pe kernel.o disk.o stdio.o mouse2.o utils.o keyboard.o io.o inout.o mouse.o
 
 objcopy -O binary kernel.pe kernel.bin
 
@@ -31,6 +31,13 @@ if exist kernel.bin (
     goto cleanup_error
 )
 
+if exist power.bin (
+    powershell -Command " $image = [System.IO.File]::ReadAllBytes('os-image.img'); $prog = [System.IO.File]::ReadAllBytes('power.bin'); $appStruct = New-Object byte[] 512; $nameBytes = [System.Text.Encoding]::ASCII.GetBytes('power'); [System.Array]::Copy($nameBytes, $appStruct, $nameBytes.Length); $lba = [System.BitConverter]::GetBytes([int]200); [System.Array]::Copy($lba, 0, $appStruct, 32, 4); $size = [System.BitConverter]::GetBytes([int]1); [System.Array]::Copy($size, 0, $appStruct, 36, 4); $appStruct[40] = [byte]1; [System.Array]::Copy($appStruct, 0, $image, (150 * 512), 512); [System.Array]::Copy($prog, 0, $image, (200 * 512), $prog.Length); [System.IO.File]::WriteAllBytes('os-image.img', $image) "
+) else (
+    echo Error: power.bin not found!
+	goto cleanup
+)
+
 qemu-system-i386 -drive format=raw,file=os-image.img
 
 :cleanup
@@ -38,11 +45,13 @@ del *.o
 del kernel.pe
 del kernel.bin
 del boot.bin
+del power.bin
 exit /b
 
 :cleanup_error
 del *.o
 del kernel.pe
 del boot.bin
+del power.bin
 pause
 exit /b

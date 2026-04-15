@@ -1,11 +1,20 @@
 #ifndef DISK_H
 #define DISK_H
 
-/* * Структура файлу (розмір 512 байт, що відповідає одному сектору)
- */
+#define APPS_START_SECTOR 150  
+#define MAX_APPS 16           
+#define APP_DATA_START 200
+
 struct File {
 	char name[32];
 	char content[476];
+	int exists;
+};
+
+struct App {
+	char name[32];
+	int start_lba;    
+	int size_sectors; 
 	int exists;
 };
 

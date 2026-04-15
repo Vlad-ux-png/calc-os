@@ -21,6 +21,27 @@ void handle_hotkeys(int code) {
 		is_window_crt = 0;
 		ncount = 1;
 	}
+
+	if (code == 0x1C && current_mode == 1 && is_button_files == 1) {
+		current_mode = 2;
+		ncount = 1;
+	}
+	if (code == 0x50 && current_mode == 1 && is_button_files == 1) {
+		is_button_apps = 1;
+		is_button_files = 0;
+		ncount = 1;
+	}
+	if (code == 0x1C && current_mode == 1 && is_button_apps == 1) {
+		current_mode = 3;
+		ncount = 1;
+	}
+	if (code == 0x48 && current_mode == 1 && is_button_apps == 1) {
+		is_button_apps = 0;
+		is_button_files = 1;
+		current_mode = 1;
+
+		ncount = 1;
+	}
 }
 
 void input_wait_string(char *buffer) {

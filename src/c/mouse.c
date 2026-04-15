@@ -114,6 +114,10 @@ void check_ui_clicks() {
 				ncount = 1;
 			}
 		}
+		if (current_mode == 1 && mouse_x >= 78 && mouse_x <= 238 && mouse_y >= 50 && mouse_y <= 68) {
+            current_mode = 2;
+			ncount = 1;
+        }
 		if (current_mode == 1 && mouse_y >= 180 && mouse_y <= 200) {
 			show_crt_window = 1;
 			ncount = 1;

@@ -35,7 +35,7 @@ refresh:
 		x = 0;
 		y = 48;
 	}
-	else {
+	else if (current_mode == 2) {
 		draw_rect(0, 40, 320, 160, 0x0B);
 		draw_rect(10, 24, 68, 13, 0x28);
 		draw_rect(95, 24, 68, 13, 0x0F);
@@ -95,6 +95,72 @@ refresh:
 			print("Text:", 0);
 		}
 	}
+	else if (current_mode == 3) {
+		draw_rect(0, 40, 320, 160, 0x0B);
+		draw_rect(10, 24, 68, 13, 0x28);
+		draw_rect(95, 24, 68, 13, 0x0F);
+
+		x = 12;
+		y = 26;
+		print("Terminal", 0x00);
+
+		x = 97;
+		y = 26;
+		print("Explorer", 0x00);
+
+		int file_count = 0;
+    		struct File f;
+    		struct App a;
+
+    		for (int i = 0; i < MAX_APPS; i++) {
+       		 	ata_read_sector(APPS_START_SECTOR + i, (unsigned short *)&a);
+       		 	if (a.exists == 1) {
+          		  	int col = file_count % 3;
+          		  	int row = file_count / 3;
+           		 	int icon_x = 16 + (col * 100);
+           		 	int icon_y = 50 + (row * 34);
+
+           			 draw_rect(icon_x, icon_y, 80, 24, 0x0A); 
+           			 x = icon_x + 8; y = icon_y + 8;
+           			 print(a.name, 0x00);
+            			 file_count++;
+        		}
+    		}
+	}
+	else {
+		draw_rect(0, 40, 320, 160, 0x0B);
+		draw_rect(10, 24, 68, 13, 0x28);
+		draw_rect(95, 24, 68, 13, 0x0F);
+
+		if (is_button_files == 1) {
+			draw_rect(78, 50, 160, 18, 0x28);
+			draw_rect(78, 100, 160, 18, 0x0F);
+
+			x = 138;
+			y = 55;
+			print("Files", 0x00);
+			x = 138;
+			y = 105;
+			print("Apps", 0x00);
+		}
+		else if (is_button_apps == 1) {
+			draw_rect(78, 50, 160, 18, 0x0F);
+			draw_rect(78, 100, 160, 18, 0x28);
+			x = 138;
+			y = 55;
+			print("Files", 0x00);
+			x = 138;
+			y = 105;
+			print("Apps", 0x00);
+		}
+		x = 12;
+		y = 26;
+		print("Terminal", 0x00);
+
+		x = 97;
+		y = 26;
+		print("Explorer", 0x00);
+	}
 
 		while (1) {
 			if (ncount == 1) {
@@ -124,15 +190,13 @@ refresh:
 					print("  dir  - list all files\n", 0x0F);
 					print("  crt  - create a new text file\n", 0x0F);
 					print("  draw - draw a rectangle\n", 0x0F);
-					print("  exit - shutdown processor\n", 0x0F);
+					print("  run - run program from fisk\n", 0x0F);
+					print("  apps - available apps\n", 0x0F);
 					print("  fmt - format disk\n", 0x0F);
 				}
 				else if (compare_strings(command, "cln")) {
 					screen_clear();
 					ncount = 1;
-				}
-				else if (compare_strings(command, "exit")) {
-					sys_halt();
 				}
 				else if (compare_strings(command, "dir")) {
 					struct File f;
@@ -192,13 +256,63 @@ refresh:
 					print("\nDone!\n", 0x0A);
 					ncount = 1;
 				}
+				else if (compare_strings(command, "run")) {
+					char appname[32];
+					print("App Name: ", 0x0B);
+					input_wait_string(appname);
+					print("\n", 0x0F);
+
+					struct App a;
+					int found = 0;
+
+					for (int i = 0; i < MAX_APPS; i = i + 1) {
+						ata_read_sector(APPS_START_SECTOR + i, (unsigned short *)&a);
+
+						if (a.exists && compare_strings(a.name, appname)) {
+							unsigned char *load_address = (unsigned char *)0x100000;
+
+							for (int s = 0; s < a.size_sectors; s = s + 1) {
+								ata_read_sector(a.start_lba + s, (unsigned short *)(load_address + (s * 512)));
+							}
+
+							void(*run_me)() = (void(*)())0x100000;
+							run_me();
+							found = 1;
+							break;
+						}
+					}
+					if (!found) {
+						print("App not found!\n", 0x0C);
+					}
+				}
+				else if (compare_strings(command, "apps")) {
+					struct App a;
+					int apps_found = 0;
+
+					print("\n", 0x0E); 
+
+					for (int i = 0; i < MAX_APPS; i = i + 1) {
+						ata_read_sector(150 + i, (unsigned short *)&a);
+
+						if (a.exists == 1) {
+							print("  - ", 0x0B);  
+							print(a.name, 0x0F);  
+							print("\n", 0x0F);
+							apps_found++;
+						}
+					}
+
+					if (apps_found == 0) {
+						print("No apps installed.\n", 0x0C); 
+					}
+				}
 				else {
 					if (command[0] != '\0') {
 						print("Unknown command. Type 'help'.\n", 0x0C);
 					}
 				}
 			}
-			else {
+			else if (current_mode == 2) {
 				int code = get_scancode();
 				if (code != 0) {
 					handle_hotkeys(code); 
@@ -208,6 +322,7 @@ refresh:
 						ncount = 1; 
 					}
 				}
+
 				if (ncount == 1) {
 					goto refresh;
 				}
@@ -251,6 +366,15 @@ refresh:
 					show_crt_window = 0;
 					is_window_crt = 0;
 					ncount = 1;
+				}
+			}
+			else {
+				int code = get_scancode();
+				if (code != 0) {
+					handle_hotkeys(code); 
+				}
+				if (ncount == 1) {
+					goto refresh;
 				}
 			}
 		}

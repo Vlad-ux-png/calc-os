@@ -19,7 +19,7 @@ start:
     mov es, ax
     mov bx, 0x1000
     mov ah, 0x02
-    mov al, 40
+    mov al, 50
     mov ch, 0
     mov dh, 0
     mov cl, 2

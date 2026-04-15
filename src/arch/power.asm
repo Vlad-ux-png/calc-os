@@ -1,8 +1,8 @@
 [bits 32]
-global sys_halt
+org 0x100000
 
-sys_halt:
+start:
     cli
-    jmp .loop
 .loop:
     hlt
+    jmp .loop

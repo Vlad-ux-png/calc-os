@@ -17,6 +17,8 @@ int ncount = 0;
 int current_mode = 0;
 int show_crt_window = 0;
 int is_window_crt = 0;
+int is_button_apps = 0;
+int is_button_files = 1;
 
 void screen_clear() {
 	for (int i = 0; i < 64000; i = i + 1) {
