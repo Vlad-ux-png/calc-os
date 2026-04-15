@@ -15,6 +15,10 @@ unsigned char mouse_cursor[8][8] = {
 	{2, 0, 0, 0, 0, 0, 0, 0}
 };
 
+int show_file_content = 0;
+char open_file_name[32];
+char open_file_text[476];
+
 void draw_cursor(int mx, int my) {
 	for (int row = 0; row < 8; row++) {
 		for (int col = 0; col < 8; col++) {
@@ -118,7 +122,35 @@ void check_ui_clicks() {
             current_mode = 2;
 			ncount = 1;
         }
-		if (current_mode == 1 && mouse_y >= 180 && mouse_y <= 200) {
+		if (current_mode == 1 && mouse_x >= 78 && mouse_x <= 238 && mouse_y >= 100 && mouse_y <= 118) {
+			current_mode = 3;
+			ncount = 1;
+		}
+		if (current_mode == 2) {
+			int file_count = 0;
+			struct File f_click; 
+
+			for (int i = 0; i < MAX_FILES; i++) {
+				ata_read_sector(MAX_SECTORS + i, (unsigned short *)&f_click);
+
+				if (f_click.exists == 1) {
+					int col = file_count % 3;
+					int row = file_count / 3;
+					int ix = 16 + (col * 100);
+					int iy = 50 + (row * 34);
+
+					if (mouse_x >= ix && mouse_x <= ix + 80 && mouse_y >= iy && mouse_y <= iy + 24) {
+						copy_string(open_file_name, f_click.name);
+						copy_string(open_file_text, f_click.content);
+						show_file_content = 1;
+						ncount = 1;
+						return; 
+					}
+					file_count++;
+				}
+			}
+		}
+		if (current_mode == 2 && mouse_y >= 180 && mouse_y <= 200) {
 			show_crt_window = 1;
 			ncount = 1;
 		}

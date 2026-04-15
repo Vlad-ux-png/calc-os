@@ -16,6 +16,9 @@ extern int old_mouse_y;
 extern int mouse_left_button;
 extern unsigned char mouse_cursor[8][8];
 extern unsigned char cursor_back_buffer[64];
+extern int show_file_content;
+extern char open_file_name[32];
+extern char open_file_text[476];
 
 /* --- Прототипи функцій миші --- */
 void mouse_handler();

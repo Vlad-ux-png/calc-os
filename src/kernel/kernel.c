@@ -94,6 +94,18 @@ refresh:
 			y = 110;
 			print("Text:", 0);
 		}
+		if (show_file_content == 1) {
+			draw_rect(45, 35, 230, 130, 0x00);
+			draw_rect(47, 37, 226, 126, 0x0F);
+
+			x = 55; y = 45;
+			print(open_file_name, 0x0B); 
+
+			draw_rect(55, 60, 210, 1, 0x07);
+
+			x = 55; y = 70;
+			print(open_file_text, 0x00);
+		}
 	}
 	else if (current_mode == 3) {
 		draw_rect(0, 40, 320, 160, 0x0B);
@@ -321,6 +333,11 @@ refresh:
 						show_crt_window = 1;
 						ncount = 1; 
 					}
+
+					if (show_file_content == 1 && code == 0x01) {
+						show_file_content = 0;
+						ncount = 1;
+					}
 				}
 
 				if (ncount == 1) {
@@ -381,6 +398,7 @@ refresh:
 	}
 
 void __attribute__((section(".text.entry"))) kernel_main() {
+	show_file_content = 0;
 	init_mouse();
 	screen_clear();
 	prompt();
