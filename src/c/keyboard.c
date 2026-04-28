@@ -4,6 +4,8 @@
 #include <mouse.h>
 #include <utils.h>
 
+int shift_pressed = 0;
+
 void handle_hotkeys(int code) {
 	if (code == 0x4B) {
 		current_mode = 0;

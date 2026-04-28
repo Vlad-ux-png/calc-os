@@ -3,6 +3,7 @@
 #include <mouse.h>
 #include <utils.h>
 #include <keyboard.h>
+#include <font.h>
 
 #define VIDEO_MEMORY ((unsigned char*)0xA0000)
 #define MAX_FILES 64
@@ -31,8 +32,6 @@ void screen_clear() {
 }
 
 void put_char(char s, unsigned char color) {
-	unsigned char *font = (unsigned char*)0xFFA6E;
-
 	if (s == '\n') {
 		x = 0;
 		y = y + 8;
@@ -49,7 +48,7 @@ void put_char(char s, unsigned char color) {
 	}
 
 	for (int i = 0; i < 8; i = i + 1) {
-		unsigned char bits = font[s * 8 + i];
+		unsigned char bits = font[(int)s][i];
 		for (int j = 0; j < 8; j = j + 1) {
 			if (bits > 127) {
 				VIDEO_MEMORY[(y + i) * 320 + (x + j)] = color;

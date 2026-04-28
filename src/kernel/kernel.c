@@ -9,6 +9,7 @@ char filename[8];
 char filecontent[256];
 
 void prompt() {
+	
 refresh:
 	ncount = 0;
 
@@ -84,7 +85,7 @@ refresh:
 
 			x = 100;
 			y = 50;
-			print("Create New File", 0x00);
+			print("Create a new file", 0x00);
 
 			x = 70; 
 			y = 80;  
@@ -93,18 +94,6 @@ refresh:
 			x = 70; 
 			y = 110;
 			print("Text:", 0);
-		}
-		if (show_file_content == 1) {
-			draw_rect(45, 35, 230, 130, 0x00);
-			draw_rect(47, 37, 226, 126, 0x0F);
-
-			x = 55; y = 45;
-			print(open_file_name, 0x0B); 
-
-			draw_rect(55, 60, 210, 1, 0x07);
-
-			x = 55; y = 70;
-			print(open_file_text, 0x00);
 		}
 	}
 	else if (current_mode == 3) {
@@ -202,9 +191,9 @@ refresh:
 					print("  dir  - list all files\n", 0x0F);
 					print("  crt  - create a new text file\n", 0x0F);
 					print("  draw - draw a rectangle\n", 0x0F);
-					print("  run - run program from fisk\n", 0x0F);
+					print("  run  - run program from disk\n", 0x0F);
 					print("  apps - available apps\n", 0x0F);
-					print("  fmt - format disk\n", 0x0F);
+					print("  fmt  - format disk\n", 0x0F);
 				}
 				else if (compare_strings(command, "cln")) {
 					screen_clear();
@@ -245,11 +234,11 @@ refresh:
 				else if (compare_strings(command, "draw")) {
 					char val[16];
 					int r_w, r_h, r_x, r_y;
-					print("Enter Width: ", 0x0B);
+					print("Enter width: ", 0x0B);
 					input_wait_string(val);
 					r_w = atoi(val);
 					print("\n", 0x0F);
-					print("Enter Height: ", 0x0B);
+					print("Enter height: ", 0x0B);
 					input_wait_string(val);
 					r_h = atoi(val);
 					print("\n", 0x0F);
@@ -270,7 +259,7 @@ refresh:
 				}
 				else if (compare_strings(command, "run")) {
 					char appname[32];
-					print("App Name: ", 0x0B);
+					print("App name: ", 0x0B);
 					input_wait_string(appname);
 					print("\n", 0x0F);
 
@@ -320,7 +309,7 @@ refresh:
 				}
 				else {
 					if (command[0] != '\0') {
-						print("Unknown command. Type 'help'.\n", 0x0C);
+						print("Uncnown command. Type 'help'\n", 0x0C);
 					}
 				}
 			}
@@ -332,11 +321,6 @@ refresh:
 					if (code == 0x3C) { 
 						show_crt_window = 1;
 						ncount = 1; 
-					}
-
-					if (show_file_content == 1 && code == 0x01) {
-						show_file_content = 0;
-						ncount = 1;
 					}
 				}
 
@@ -398,7 +382,6 @@ refresh:
 	}
 
 void __attribute__((section(".text.entry"))) kernel_main() {
-	show_file_content = 0;
 	init_mouse();
 	screen_clear();
 	prompt();
