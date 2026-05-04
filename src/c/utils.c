@@ -80,3 +80,11 @@ int atoi(char *str) {
 	}
 	return res;
 }
+
+void draw_button(int _x, int _y, int _width, int _height, char *_msg, unsigned char color, unsigned char text_color) {
+    draw_rect(_x, _y, _width, _height, color);
+    x = _x + 4;
+    y = _y + 4;
+
+    print(_msg, text_color);
+}

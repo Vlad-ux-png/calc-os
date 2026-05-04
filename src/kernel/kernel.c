@@ -21,33 +21,19 @@ refresh:
 
     if (current_mode == 0) {
         draw_rect(0, 80, 640, 320, 0);
-        draw_rect(20, 48, 136, 26, 0);
-        draw_rect(190, 48, 136, 26, 2);
 
-        x = 24;
-        y = 52;
-        print("Terminal", 1);
-
-        x = 194;
-        y = 52;
-        print("Explorer", 0);
+        draw_button(20, 48, 136, 26, "Terminal", 0, 1);
+        draw_button(190, 48, 136, 26, "Explorer", 2, 1);
 
         x = 0;
         y = 96;
     }
     else if (current_mode == 2) {
         draw_rect(0, 80, 640, 320, 0);
-        draw_rect(20, 48, 136, 26, 2);
-        draw_rect(190, 48, 136, 26, 0);
         draw_rect(0, 360, 640, 36, 1);
 
-        x = 24;
-        y = 52;
-        print("Terminal", 0);
-
-        x = 194;
-        y = 52;
-        print("Explorer", 1);
+        draw_button(20, 48, 136, 26, "Terminal", 2, 1);
+        draw_button(190, 48, 136, 26, "Explorer", 0, 1);
 
         x = 144;
         y = 370;
@@ -96,16 +82,9 @@ refresh:
     }
     else if (current_mode == 3) {
         draw_rect(0, 80, 640, 320, 0);
-        draw_rect(20, 48, 136, 26, 2);
-        draw_rect(190, 48, 136, 26, 0);
-
-        x = 24;
-        y = 52;
-        print("Terminal", 0);
-
-        x = 194;
-        y = 52;
-        print("Explorer", 1);
+        
+        draw_button(20, 48, 136, 26, "Terminal", 2, 1);
+        draw_button(190, 48, 136, 26, "Explorer", 0, 1);
 
         int file_count = 0;
         struct File f;
@@ -132,41 +111,18 @@ refresh:
     }
     else {
         draw_rect(0, 80, 640, 320, 1);
-        draw_rect(20, 48, 136, 26, 2);
-        draw_rect(190, 48, 136, 26, 0);
+
+        draw_button(20, 48, 136, 26, "Terminal", 2, 1);
+        draw_button(190, 48, 136, 26, "Explorer", 0, 1);
 
         if (is_button_files == 1) {
-            draw_rect(156, 100, 320, 36, 0);
-            draw_rect(156, 200, 320, 36, 2);
-
-            x = 276;
-            y = 110;
-            print("Files", 1);
-
-            x = 276;
-            y = 210;
-            print("Apps", 0);
+            draw_button(156, 100, 320, 36, "Files", 0, 1);
+            draw_button(156, 200, 320, 36, "Apps", 2, 1);
         }
         else if (is_button_apps == 1) {
-            draw_rect(156, 100, 320, 36, 2);
-            draw_rect(156, 200, 320, 36, 0);
-
-            x = 276;
-            y = 110;
-            print("Files", 0);
-
-            x = 276;
-            y = 210;
-            print("Apps", 1);
+            draw_button(156, 100, 320, 36, "Files", 2, 1);
+            draw_button(156, 200, 320, 36, "Apps", 0, 1);
         }
-
-        x = 24;
-        y = 52;
-        print("Terminal", 0);
-
-        x = 194;
-        y = 52;
-        print("Explorer", 1);
     }
 
     while (1) {
