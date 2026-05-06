@@ -24,48 +24,27 @@ void copy_string(char *dest, char *src) {
 	dest[i] = '\0';
 }
 
-void draw_gray_rect(int x, int y, int width, int height) {
-    for (int i = 0; i < height; i = i + 1) {
-        for (int j = 0; j < width; j = j + 1) {
-            int curr_x = x + j;
-            int curr_y = y + i;
+void draw_rect(int x, int y, int width, int height, unsigned long color) {
+    unsigned short pitch = *(unsigned short*)0x8010;
+    unsigned int lfb_addr = *(unsigned int*)0x8028;
+    unsigned char *fb = (unsigned char *)lfb_addr;
 
-            if (curr_x >= 0 && curr_x < 640 && curr_y >= 0 && curr_y < 480) {
-                int is_white = (curr_x + curr_y) % 2 == 0;
+    unsigned char r = (unsigned char)((color & 0xFF0000UL) >> 16);
+    unsigned char g = (unsigned char)((color & 0x00FF00UL) >> 8);
+    unsigned char b = (unsigned char)(color & 0x0000FFUL);
+
+    for (int i = 0; i < height; i++) {
+        unsigned int row_offset = (y + i) * pitch;
+        for (int j = 0; j < width; j++) {
+            int cur_x = x + j;
+            int cur_y = y + i;
+
+            if (cur_x >= 0 && cur_x < 640 && cur_y >= 0 && cur_y < 480) {
+                unsigned int offset = row_offset + (cur_x * 3);
                 
-                unsigned char *row = &VIDEO_MEMORY[curr_y * 80];
-                unsigned char mask = 128 >> (curr_x % 8);
-
-                if (is_white) {
-                    row[curr_x / 8] = row[curr_x / 8] | mask;
-                } else {
-                    row[curr_x / 8] = row[curr_x / 8] & ~mask;
-                }
-            }
-        }
-    }
-}
-
-void draw_rect(int x, int y, int width, int height, unsigned char color) {
-    if (color == 2) {
-        draw_gray_rect(x, y, width, height);
-        return;
-    }
-
-    for (int i = 0; i < height; i = i + 1) {
-        for (int j = 0; j < width; j = j + 1) {
-            int curr_x = x + j;
-            int curr_y = y + i;
-
-            if (curr_x >= 0 && curr_x < 640 && curr_y >= 0 && curr_y < 480) {
-                unsigned char *ptr = &VIDEO_MEMORY[curr_y * 80 + (curr_x / 8)];
-                unsigned char mask = 128 >> (curr_x % 8);
-
-                if (color > 0) {
-                    *ptr = *ptr | mask;   
-                } else {
-                    *ptr = *ptr & ~mask;   
-                }
+                fb[offset]     = b; 
+                fb[offset + 1] = g; 
+                fb[offset + 2] = r;
             }
         }
     }
@@ -81,7 +60,7 @@ int atoi(char *str) {
 	return res;
 }
 
-void draw_button(int _x, int _y, int _width, int _height, char *_msg, unsigned char color, unsigned char text_color) {
+void draw_button(int _x, int _y, int _width, int _height, char *_msg, unsigned long color, unsigned long text_color) {
     draw_rect(_x, _y, _width, _height, color);
     x = _x + 4;
     y = _y + 4;

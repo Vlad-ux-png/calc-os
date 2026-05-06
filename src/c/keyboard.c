@@ -117,7 +117,7 @@ void input_wait_string(char *buffer) {
 					i = i - 1;
 					if (x > 16) {
 						x = x - 8;
-						draw_rect(x, y, 8, 8, 0);
+						draw_rect(x, y, 8, 8, 0x000000UL);
 					}
 				}
 			}
@@ -126,7 +126,7 @@ void input_wait_string(char *buffer) {
 					i = i - 1;
 					if (x > 48) {
 						x = x - 8;
-						draw_rect(x, y, 8, 8, 0);
+						draw_rect(x, y, 8, 8, 0xFFFFFFUL);
 					}
 				}
 			}
@@ -139,12 +139,12 @@ void input_wait_string(char *buffer) {
 
 		if (letter != 0 && i < 255) {
 			if (is_window_crt == 0) {
-				put_char(letter, 1);
+				put_char(letter, 0xFFFFFF);
 				buffer[i] = letter;
 				i++;
 			}
 			else if (is_window_crt == 1) {
-				put_char(letter, 1);
+				put_char(letter, 0x000000);
 				buffer[i] = letter;
 				i++;
 			}

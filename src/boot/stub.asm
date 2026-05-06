@@ -12,7 +12,13 @@ start:
     mov ax, 0x2401
     int 0x15
 
-    mov ax, 0x0011
+    mov ax, 0x4F01        
+    mov cx, 0x4112      
+    mov di, vbe_info_block  
+    int 0x10
+
+    mov ax, 0x4F02     
+    mov bx, 0x4112       
     int 0x10
 
     mov ax, 0x0000
@@ -64,6 +70,7 @@ gdt_ptr:
     dd gdt_start
 
 boot_drive: db 0
+vbe_info_block equ 0x8000
 
 times 510-($-$$) db 0
 dw 0xAA55

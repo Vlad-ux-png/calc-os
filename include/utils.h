@@ -21,10 +21,10 @@ int atoi(char *str);
 /**
  * ����� ���������� ����������� � �������'�� VGA (0xA0000).
  * @param x, y ���������� ����� ��������� ����
- * @param width, height ������
+ * @param width, height ������ 
  * @param color ������ ������� (0-255)
  */
-void draw_rect(int x, int y, int width, int height, unsigned char color);
-void draw_button(int _x, int _y, int _width, int _height, char *_msg, unsigned char color, unsigned char text_color);
+void draw_rect(int x, int y, int width, int height, unsigned long color);
+void draw_button(int _x, int _y, int _width, int _height, char *_msg, unsigned long color, unsigned long text_color);
 
 #endif

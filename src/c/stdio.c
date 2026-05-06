@@ -5,10 +5,6 @@
 #include <keyboard.h>
 #include <font.h>
 
-#define VIDEO_MEMORY ((unsigned char*)0xA0000)
-#define MAX_FILES 64
-#define MAX_SECTORS 10
-
 int x = 0;
 int y = 0;
 int ncount = 0;
@@ -30,56 +26,59 @@ void init_palette() {
     set_palette_color(1, 45, 50, 58);
 }
 
-
 void screen_clear() {
-	for (int i = 0; i < 64000; i = i + 1) {
-		VIDEO_MEMORY[i] = 0;
-	}
+    unsigned int *fb = VIDEO_MEMORY_PTR;
+    int total_pixels = 1024 * 768;
 
-	x = 0;
-	y = 0;
-	ncount = 1;
+    for (int i = 0; i < total_pixels; i++) {
+        fb[i] = 0x00000000; 
+    }
+
+    x = 0;
+    y = 0;
 }
 
-void put_char(char s, unsigned char color) {
+void put_char(char s, unsigned int color) {
     if (s == '\n') {
         x = 0;
-        y = y + 8;
+        y += 8; 
         return;
     }
 
-    if (x >= 640) {
+    if (x >= 1024) {
         x = 0;
-        y = y + 8;
+        y += 8;
     }
 
-    if (y >= 480) {
+    if (y >= 768) {
         screen_clear();
-        y = 0;
     }
 
-    for (int i = 0; i < 8; i = i + 1) {
+    unsigned short pitch = *(unsigned short*)0x8010; 
+    unsigned int *lfb_ptr = (unsigned int*)0x8028;  
+    unsigned char *fb = (unsigned char *)(*lfb_ptr);
+    
+    int bytes_per_pixel = 3; 
+
+    for (int i = 0; i < 8; i++) {
         unsigned char bits = font[(int)s][i];
-        unsigned char *row = &VIDEO_MEMORY[(y + i) * 80];
-
-        for (int j = 0; j < 8; j = j + 1) {
-            int pos = x + j;
-            unsigned char mask = 128 >> (pos % 8);
-
+        
+        for (int j = 0; j < 8; j++) {
             if (bits > 127) {
-                if (color > 0) {
-                    row[pos / 8] = row[pos / 8] | mask;
-                } else {
-                    row[pos / 8] = row[pos / 8] & ~mask;
-                }
+                int offset = ((y + i) * pitch) + ((x + j) * bytes_per_pixel);
+                
+                fb[offset]     = (color & 0xFF);     
+                fb[offset + 1] = (color >> 8) & 0xFF; 
+                fb[offset + 2] = (color >> 16) & 0xFF;   
             }
             bits = bits << 1;
         }
     }
-    x = x + 8;
+
+    x += 8;
 }
 
-void print(char *msg, unsigned char color) {
+void print(char *msg, unsigned int color) {
 	for (int i = 0; msg[i] != 0; i++) {
 		put_char(msg[i], color);
 	}

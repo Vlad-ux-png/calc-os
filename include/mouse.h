@@ -12,7 +12,7 @@ extern int old_mouse_x;
 extern int old_mouse_y;
 extern int mouse_left_button;
 extern unsigned char mouse_cursor[16][16];
-extern unsigned char cursor_back_buffer[256];
+extern unsigned long cursor_back_buffer[16 * 16];
 
 void mouse_handler();
 void draw_cursor(int mx, int my);
