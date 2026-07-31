@@ -1,0 +1,20 @@
+romimage: file=/usr/share/bochs/BIOS-bochs-legacy
+vgaromimage: file=/usr/share/vgabios/vgabios.bin
+
+floppy_bootsig_check: disabled=0
+floppya: 1_44=os-image.img, status=inserted
+boot: floppy
+
+log: bochsout.txt
+
+display_library: x
+
+sound: driver=dummy
+
+speaker: enabled=0, mode=none
+
+cpu: count=1, ips=100000000, quantum=16
+
+clock: sync=none, time0=local
+
+pci: enabled=1, chipset=i440fx

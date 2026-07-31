@@ -1,0 +1,38 @@
+#ifndef MM_H
+#define MM_H
+#include <stdint.h>
+
+#if defined(__riscv)
+    #if __riscv_xlen == 64
+        #define HEAP_START 0x80500000          
+        #define HEAP_SIZE  (4 * 1024 * 1024)  
+    #else
+        #define HEAP_START 0x80500000          
+        #define HEAP_SIZE  (4 * 1024 * 1024)  
+    #endif
+#else
+    #define HEAP_START 0x200000          
+    #define HEAP_SIZE  (4 * 1024 * 1024)  
+#endif
+
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
+typedef uint32_t size_t;
+
+typedef struct Block {
+    size_t size;
+    int free;
+    struct Block* next;
+} Block;
+
+void init_memory_manager();
+void* kmalloc(size_t size);
+void kfree(void* ptr);
+
+void init_paging();
+void enable_paging();
+extern __attribute__((section(".bss.safe"), aligned(4096))) uint32_t page_directory[1024];
+
+#endif 
