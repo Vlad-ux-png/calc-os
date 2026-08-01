@@ -4,8 +4,10 @@
 #define LEON3_UART_BASE 0x80000100
 #define UART_DATA   ((volatile uint32_t*)(LEON3_UART_BASE + 0x00))
 #define UART_STATUS ((volatile uint32_t*)(LEON3_UART_BASE + 0x04))
-#define UART_STS_TE 0x00000002 
-#define UART_STS_DR 0x00000001 
+#define UART_STS_DR (1 << 0) 
+#define UART_STS_TS (1 << 1)
+#define UART_STS_TE (1 << 2)
+#define UART_CTRL   ((volatile uint32_t*)(LEON3_UART_BASE + 0x08))
 
 void uart_put_char(char c);
 void uart_printk(const char* str);
@@ -71,5 +73,9 @@ int cmp_strings(const char *str1, const char *str2);
 
 extern unsigned int timer_ticks;
 void init_timer();
+
+#define PCI_VENDOR_TABLE_SIZE (sizeof(pci_vendor_table) / sizeof(pci_vendor_table[0]))
+
+#define TIMER_CTRL_IP (1 << 4) 
 
 #endif

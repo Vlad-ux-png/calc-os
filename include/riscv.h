@@ -64,4 +64,6 @@ extern void trap_vector(void);
 
 int cmp_strings(const char *str1, const char *str2);
 
+#define PCI_VENDOR_TABLE_SIZE (sizeof(pci_vendor_table) / sizeof(pci_vendor_table[0]))
+
 #endif

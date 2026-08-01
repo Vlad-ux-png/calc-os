@@ -33,4 +33,6 @@ void graphics_init();
 extern pci_device_t devices[32];
 extern int device_count;
 
+#define PCI_VENDOR_TABLE_SIZE (sizeof(pci_vendor_table) / sizeof(pci_vendor_table[0]))
+
 #endif

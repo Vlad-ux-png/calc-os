@@ -6,9 +6,10 @@ char com[512];
 char buffer[4096];
 
 void system_sparc(uint32_t hartid, uint32_t dtb_ptr) {
+    *UART_CTRL = 0x3;
+    
 	init_memory_manager();
 	pci_scan();
-    init_timer();
 	
     while(1) {
         uart_printk("> ");
@@ -22,7 +23,6 @@ void system_sparc(uint32_t hartid, uint32_t dtb_ptr) {
             uart_printk("  status - print CPU status\n");
             uart_printk("  reboot - reboot the system\n");
             uart_printk("  devices - print PCI devices\n");
-			uart_printk("  lifetime - system timer ticks\n");
         }
 		else if (cmp_strings(com, "status")) {
             uint32_t psr = read_mstatus(); 
@@ -81,11 +81,6 @@ void system_sparc(uint32_t hartid, uint32_t dtb_ptr) {
 		else if (cmp_strings(com, "devices")) {
 			pci_print_devices();
 		}
-        else if (cmp_strings(com, "lifetime")) {
-			itoa2(timer_ticks, buffer);
-			uart_printk(buffer);
-            uart_printk("\n");
-        }
 		else {
 			if (com[0] != '\0') {
 				uart_printk("Unknown command. Type 'help'\n");

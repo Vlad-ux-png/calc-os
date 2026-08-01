@@ -48,7 +48,7 @@ else ifeq ($(ARCH),sparc)
     LDFLAGS     := -m elf32_sparc -T arch/sparc/linker_sparc.ld --nostdlib --static
 
     OBJ := boot2.o sparc_init.o mm.o uart2.o keybrd.o pci3.o \
-           not_x86.o timer2.o
+           not_x86.o 
 endif
 
 vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/tasks mm arch/x86/cpu/paging \
@@ -58,7 +58,7 @@ vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/task
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
 		  drivers/keybrd  arch/risc-v/drivers/pci arch/sparc \
           arch/sparc/drivers/uart drivers/keybrd arch/sparc/drivers/pci \
-          arch/risc-v/cpu/timer arch/sparc/cpu/timer fs
+          arch/risc-v/cpu/timer fs
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot arch/sparc/boot
