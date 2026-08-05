@@ -1,11 +1,20 @@
-#include <keyboard.h>
-#include <cmos.h>
-#include <video.h>
-#include <mouse.h>
-#include <utils.h>
-#include <stdint.h>
+#if !defined(__riscv)
 #include <idt.h>
 #include <task.h>
+#include <cmos.h>
+#include <mouse.h>
+#include <utils.h>
+#include <idt.h>
+#include <task.h>
+#endif
+
+#include <keyboard.h>
+#include <video.h>
+#include <stdint.h>
+
+#if defined(__riscv)
+#include <riscv.h>
+#endif
 
 int shift_pressed = 0;
 int ctrl_pressed = 0;
@@ -16,6 +25,23 @@ uint8_t kbd_buffer[KBD_BUFFER_SIZE];
 volatile int kbd_head = 0;
 volatile int kbd_tail = 0;
 
+#if defined(__riscv)
+typedef void (*sig_handler_t)(int);
+
+typedef struct {
+    void* esp; 
+    uint8_t id;
+    uint8_t state;
+    uint8_t is_active;
+
+    uint32_t pending_signals; 
+    sig_handler_t signal_handlers[NUM_SIGNALS];
+} Task;
+
+Task task_list[4];
+int current_uid = 0xFFFF;
+#endif
+
 void kbd_put_scancode(uint8_t code) {
     int next = (kbd_head + 1) % KBD_BUFFER_SIZE;
     if (next != kbd_tail) { 
@@ -25,17 +51,17 @@ void kbd_put_scancode(uint8_t code) {
 }
 
 uint8_t get_scancode() {
-    __asm__ __volatile__("cli"); 
+    cli();
 	
     if (kbd_head == kbd_tail) {
-        __asm__ __volatile__("sti");
+        sti();
         return 0; 
     }
     
     uint8_t code = kbd_buffer[kbd_tail];
     kbd_tail = (kbd_tail + 1) % KBD_BUFFER_SIZE;
 
-    __asm__ __volatile__("sti"); 
+    sti();
     return code;
 }
 
@@ -102,6 +128,9 @@ void handle_hotkeys(int code) {
 }
 
 void input_wait_string(char *buffer) {
+    #if defined(__riscv)
+    get_string(buffer);
+    #else
     int i = 0;
     int shift_pressed = 0;
 
@@ -230,4 +259,5 @@ void input_wait_string(char *buffer) {
             i++;
         }
     }
+    #endif
 }

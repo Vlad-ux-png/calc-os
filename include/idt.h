@@ -192,4 +192,8 @@ int sys_write(int fd, const char* str, uint8_t color);
 
 void system();
 
+
+#define cli() __asm__ __volatile__ ("cli");
+#define sti() __asm__ __volatile__ ("sti");
+
 #endif

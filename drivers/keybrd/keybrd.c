@@ -1,5 +1,8 @@
 #include <stdint.h>
+
+#if defined(__riscv)
 #include <riscv.h>
+#endif
 
 void get_string(char *buffer) {
     int i = 0;

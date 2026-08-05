@@ -1,20 +1,27 @@
+#if !defined(__riscv)
 #include <fat.h>
 #include <cmos.h>
-#include <video.h>
-#include <utils.h>
 #include <mouse.h>
-#include <keyboard.h>
 #include <idt.h>
-#include <stdint.h>
 #include <ata.h>
 #include <sound.h>
-#include <pci.h>
-#include <mm.h>
 #include <forth.h>
 #include <task.h>
 #include <vfs.h>
 #include <casm.h>
+#endif
+
+#include <video.h>
+#include <utils.h>
+#include <keyboard.h>
+#include <stdint.h>
+#include <pci.h>
+#include <mm.h>
 #include <coms.h>
+
+#if defined(__riscv)
+#include <riscv.h>
+#endif
 
 char command[256];
 char name[128];
@@ -32,23 +39,27 @@ refresh:
     ncount = 0;
 
     if (is_crushed == 1) {
+        #if !defined(__riscv)
         delay_ticks(300);
         is_scaled = 0;
         is_crushed = 0;
+        #endif
     }
 
     draw_rect(0, 0, 1024, 40, 7);
 
     draw_button(10, 5, 56, 26, "CalcOS", 0, 15);
 
-    asm volatile("sti");
+    cli();
 
     graphics();
 
     while (1) {
         if (ncount == 1) goto refresh;
 
+        #if !defined(__riscv)
         update_system();
+        #endif
 
         if (ncount == 1) goto refresh;
 

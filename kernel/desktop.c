@@ -17,6 +17,10 @@
 #include <coms.h>
 #include <font.h>
 
+#if defined(__riscv)
+#include <riscv.h>
+#endif
+
 static const uint8_t fade_palette[24] = {
     15, 15, 19, 19, 19, 19, 7,  7, 
     7,  7,  18, 18, 18, 8,  8,  8, 
@@ -57,7 +61,7 @@ void draw_desktop() {
 
     int reflect_y = text_y + 24 + 2; 
 
-asm volatile("cli");
+    cli();
     for (int char_idx = 0; text[char_idx] != 0; char_idx++) {
         unsigned char s = (unsigned char)text[char_idx];
         int start_x = text_x + (char_idx * 8 * scale);
@@ -93,11 +97,14 @@ asm volatile("cli");
             }
         }
     }
-asm volatile("sti");
+    cli();
 #endif
 }
 
 void graphics() {
+    #if defined(__riscv)
+    return;
+    #else
     if (current_mode == 0) {
         if (draw_0 == 1) {
             draw_rect(0, 40, 1024, 728, 0);
@@ -259,4 +266,5 @@ void graphics() {
         }
         is_button_calc = 0;
     }
+    #endif
 }

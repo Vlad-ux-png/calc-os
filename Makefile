@@ -33,35 +33,18 @@ else ifeq ($(ARCH),riscv)
     LDFLAGS     := -m elf32lriscv -T arch/risc-v/linker_riscv.ld --nostdlib --static
 
     OBJ := boot.o riscv_init.o mm.o uart.o video.o font.o keybrd.o manual.o \
-	       pci2.o timer.o not_x86.o
-
-else ifeq ($(ARCH),sparc)
-    AS      := sparc64-linux-gnu-gcc
-    CC      := sparc64-linux-gnu-gcc
-    LD      := sparc64-linux-gnu-ld
-    OBJCOPY := sparc64-linux-gnu-objcopy
-    RM      := rm -f
-    
-    ASFLAGS_ELF := -c -m32 -mcpu=v8
-    CFLAGS      := -m32 -mcpu=v8 -msoft-float -ffreestanding -fno-stack-protector \
-                   -ffunction-sections -I./include -c -fno-pic
-    LDFLAGS     := -m elf32_sparc -T arch/sparc/linker_sparc.ld --nostdlib --static
-
-    OBJ := boot2.o sparc_init.o mm.o uart2.o keybrd.o pci3.o \
-           not_x86.o 
+	       pci2.o timer.o not_x86.o keyboard.o
 endif
 
 vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/tasks mm arch/x86/cpu/paging \
           arch/x86/drivers/cmos drivers/video drivers/video/font arch/x86/drivers/mouse \
-          arch/x86/drivers/keyboard arch/x86/drivers/ata fs/fat12 arch/x86/drivers/sound \
+          drivers/keyboard arch/x86/drivers/ata fs/fat12 arch/x86/drivers/sound \
           arch/x86/drivers/pci arch/x86/drivers/rtl8139 fs/vfs \
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
-		  drivers/keybrd  arch/risc-v/drivers/pci arch/sparc \
-          arch/sparc/drivers/uart drivers/keybrd arch/sparc/drivers/pci \
-          arch/risc-v/cpu/timer fs
+		  drivers/keybrd  arch/risc-v/drivers/pci drivers/keybrd arch/risc-v/cpu/timer fs
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
-vpath %.S arch/risc-v/boot arch/sparc/boot
+vpath %.S arch/risc-v/boot 
 
 .PHONY: all clean cleane run boch help push test re rer dd rea rear
 
@@ -226,12 +209,3 @@ rear:
 	make ARCH=riscv
 	qemu-system-riscv32 -M virt -m 128M \
 		-bios none -nographic -kernel kernel.elf
-
-reb:
-	make clean
-	make ARCH=sparc
-
-rebr:
-	make clean
-	make ARCH=sparc
-	qemu-system-sparc -M leon3_generic -nographic -kernel kernel.elf

@@ -2,6 +2,7 @@
 #include <riscv.h>
 #include <mm.h>
 #include <coms.h>
+#include <keyboard.h>
 
 char com[512];
 char buffer[4096];
@@ -13,7 +14,7 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
     
     while(1) {
         uart_printk("> ");
-        get_string(com);
+        input_wait_string(com);
 
         uart_printk("\n");
 
