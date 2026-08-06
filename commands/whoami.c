@@ -21,13 +21,3 @@ void _start() {
         return;
     }
 }
-
-/*
-    if (current_uid != 0) {
-        printk("user\n", 15);
-        return;
-    } else {
-        printk("root\n", 15);
-        return;
-    }
-*/
