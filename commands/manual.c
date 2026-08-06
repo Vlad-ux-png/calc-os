@@ -1,6 +1,9 @@
 #include <coms.h>
 #include <riscv.h>
 #include <video.h>
+#include <stdint.h>
+#include <keyboard.h>
+#include <utils.h>
 
 void cln() {
     #if defined(__riscv)
@@ -46,4 +49,27 @@ void help() {
     print("  exit - change to user\n", 15);
     print("  whoami - print current user\n", 15);
     #endif
+}
+
+void exit2() {
+    if (current_uid == 0) {
+        current_uid = 1;
+    } 
+}
+
+void su() {
+    if (current_uid == 0) {
+        return;
+    } else {
+        char pass_buf[32];
+        print("Password: ", 15);
+        input_wait_string(pass_buf);
+        print("\n", 15);
+
+        if (compare_strings(pass_buf, (char*)root_password)) {
+            current_uid = 0;
+        } else {
+            print("su: Authentication failure\n", 15);
+        }
+    }
 }

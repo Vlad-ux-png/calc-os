@@ -56,6 +56,7 @@ extern int is_crushed;
 
 extern char name[128];
 extern char content[512];
+extern const char* root_password;
 
 void draw_desktop();
 

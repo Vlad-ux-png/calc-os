@@ -84,26 +84,10 @@ refresh:
                     help();
                 }
                 else if (compare_strings(command, "su")) {
-                    if (current_uid == 0) {
-                        print("\n", 15);
-                    } else {
-                        char pass_buf[32];
-                        print("Password: ", 15);
-        
-                        input_wait_string(pass_buf);
-                        print("\n", 15);
-
-                        if (compare_strings(pass_buf, (char*)root_password)) {
-                            current_uid = 0;
-                        } else {
-                            print("su: Authentication failure\n", 15);
-                        }
-                    }
+                   su();
                 }
                 else if (compare_strings(command, "exit")) {
-                    if (current_uid == 0) {
-                        current_uid = 1;
-                    } 
+                   exit2(); 
                 }
                 else if (compare_strings(command, "casm")) {
                     char *asm_name = strtok(NULL, " ");
