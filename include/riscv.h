@@ -49,9 +49,6 @@ uint32_t pci_find_device(uint16_t vendor_id, uint16_t device_id, uint8_t bar_off
 
 #define RISCV_ECAM_BASE 0x30000000
 
-void itoa2(int n, char* s);
-void htoa2(int n, char str[]);
-
 #define RISCV_CLINT_MTIME    ((volatile uint64_t*)0x0200BFF8)
 #define RISCV_CLINT_MTIMECMP ((volatile uint64_t*)0x02004000)
 

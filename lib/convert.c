@@ -1,13 +1,16 @@
+#if !defined(__riscv)
 #include <fat.h>
+#include <ata.h>
+#include <sound.h>
 #include <cmos.h>
+#endif
+
 #include <video.h>
 #include <utils.h>
 #include <mouse.h>
 #include <keyboard.h>
 #include <idt.h>
 #include <stdint.h>
-#include <ata.h>
-#include <sound.h>
 #include <pci.h>
 
 int atoi(char *str) {

@@ -45,15 +45,3 @@ jobs:
         with:
           name: os-image-risc-v
           path: kernel-riscv.elf
-
-      - name: Build OS image SPARC
-        run: |
-          make clean
-          make reb
-          mv kernel.elf kernel-sparc.elf
-
-      - name: Upload OS image SPARC
-        uses: actions/upload-artifact@v4
-        with:
-          name: os-image-sparc
-          path: kernel-sparc.elf

@@ -19,7 +19,8 @@ ifeq ($(ARCH),x86)
            sound.o pci.o rtl8139.o mm.o forth.o syscalls.o sys_exit.o \
            sys_getpid.o sys_open.o sys_read.o sys_time.o sys_uname.o \
            sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
-           casm.o manual.o signal.o desktop.o string.o memory.o convert.o
+           casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
+           keyboard2.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -33,7 +34,7 @@ else ifeq ($(ARCH),riscv)
     LDFLAGS     := -m elf32lriscv -T arch/risc-v/linker_riscv.ld --nostdlib --static
 
     OBJ := boot.o riscv_init.o mm.o uart.o video.o font.o keybrd.o manual.o \
-	       pci2.o timer.o not_x86.o keyboard.o
+	       convert.o string.o pci2.o timer.o keyboard.o
 endif
 
 vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/tasks mm arch/x86/cpu/paging \
@@ -41,7 +42,8 @@ vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/task
           drivers/keyboard arch/x86/drivers/ata fs/fat12 arch/x86/drivers/sound \
           arch/x86/drivers/pci arch/x86/drivers/rtl8139 fs/vfs \
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
-		  drivers/keybrd  arch/risc-v/drivers/pci drivers/keybrd arch/risc-v/cpu/timer fs
+		  drivers/keybrd  arch/risc-v/drivers/pci drivers/keybrd arch/risc-v/cpu/timer fs \
+          arch/x86/drivers/keyboard
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot 

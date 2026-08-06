@@ -3,9 +3,14 @@
 #include <mm.h>
 #include <coms.h>
 #include <keyboard.h>
+#include <utils.h>
+#include <video.h>
 
 char com[512];
 char buffer[4096];
+
+char name[128];
+char content[512];
 
 void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
     init_memory_manager();
@@ -13,44 +18,44 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
 	init_timer();
     
     while(1) {
-        uart_printk("> ");
+        printk("> ", 15);
         input_wait_string(com);
 
-        uart_printk("\n");
+        printk("\n", 15);
 
-        if (cmp_strings(com, "help")) {
+        if (compare_strings(com, "help")) {
             help();
         }
-        else if (cmp_strings(com, "status")) {
+        else if (compare_strings(com, "status")) {
 			uint32_t mstatus = read_mstatus();
             uint32_t mie = read_mie();
             uint32_t hartid = read_mhartid(); 
 
             char buf[32];
     
-            uart_printk("Current Hart (Core) ID: ");
-            itoa2(hartid, buf); uart_printk(buf); uart_printk("\n");
+            printk("Current Hart (Core) ID: ", 15);
+            itoa(hartid, buf); printk(buf, 15); printk("\n", 15);
 
-            uart_printk("mstatus register: ");
-            htoa2(mstatus, buf); uart_printk(buf); uart_printk("\n");
+            printk("mstatus register: ", 15);
+            htoa(mstatus, buf); printk(buf, 15); printk("\n", 15);
 
-            uart_printk("Global Interrupts: ");
+            printk("Global Interrupts: ", 15);
             if (mstatus & (1 << 3)) {
-                uart_printk("ENABLED\n");
+                printk("ENABLED\n", 15);
             } else {
-                uart_printk("DISABLED\n");
+                printk("DISABLED\n", 15);
             }
 
             uint8_t mpp = (mstatus >> 11) & 0x3;
-            uart_printk("Previous Privilege Mode: ");
-            if (mpp == 3) uart_printk("Machine Mode (M-Mode)\n");
-            else if (mpp == 1) uart_printk("Supervisor Mode (S-Mode)\n");
-            else uart_printk("User Mode (U-Mode)\n");
+            printk("Previous Privilege Mode: ", 15);
+            if (mpp == 3) printk("Machine Mode (M-Mode)\n", 15);
+            else if (mpp == 1) printk("Supervisor Mode (S-Mode)\n", 15);
+            else printk("User Mode (U-Mode)\n", 15);
 
-            uart_printk("Enabled Interrupts (mie): ");
-            htoa2(mie, buf); uart_printk(buf); uart_printk("\n\n");
+            printk("Enabled Interrupts (mie): ", 15);
+            htoa(mie, buf); printk(buf, 15); printk("\n\n", 15);
         }
-        else if (cmp_strings(com, "reboot")) {
+        else if (compare_strings(com, "reset")) {
             volatile uint32_t *sifive_finisher = (volatile uint32_t *)0x100000;
             *sifive_finisher = 0x5555;
 
@@ -70,17 +75,17 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
                 asm volatile("wfi"); 
             }
         }
-        else if (cmp_strings(com, "devices")) {
+        else if (compare_strings(com, "devices")) {
             pci_print_devices();
         }
-		else if (cmp_strings(com, "lifetime")) {
-			itoa2(timer_ticks, buffer);
-			uart_printk(buffer);
-            uart_printk("\n");
+		else if (compare_strings(com, "lifetime")) {
+			itoa(timer_ticks, buffer);
+			printk(buffer, 15);
+            printk("\n", 15);
         }
 		else {
 			if (com[0] != '\0') {
-				uart_printk("Unknown command. Type 'help'\n");
+				printk("Unknown command. Type 'help'\n", 15);
 			}
 		}
 	};

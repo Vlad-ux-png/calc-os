@@ -1,5 +1,10 @@
 #include <stdint.h>
 #include <riscv.h>
+#include <mm.h>
+#include <coms.h>
+#include <keyboard.h>
+#include <utils.h>
+#include <video.h>
 
 pci_device_t devices[32];
 int device_count = 0;
@@ -199,24 +204,24 @@ void pci_print_devices() {
         char buf[16];
         
         uart_printk("[");
-        itoa2(devices[i].bus, buf); uart_printk(buf); uart_printk(":");
-        itoa2(devices[i].slot, buf); uart_printk(buf); uart_printk(".");
-        itoa2(devices[i].func, buf); uart_printk(buf); uart_printk("] ");
+        itoa(devices[i].bus, buf); uart_printk(buf); uart_printk(":");
+        itoa(devices[i].slot, buf); uart_printk(buf); uart_printk(".");
+        itoa(devices[i].func, buf); uart_printk(buf); uart_printk("] ");
         
         uart_printk(pci_class_to_string(devices[i].class_id));
         uart_printk("\n");
 
         uart_printk("  Vendor: "); 
-        htoa2(devices[i].vendor_id, buf); uart_printk(buf);
+        htoa(devices[i].vendor_id, buf); uart_printk(buf);
         uart_printk(" ("); uart_printk(pci_vendor_to_string(devices[i].vendor_id)); uart_printk(")");
         uart_printk("\n");
 
         uart_printk(" | Device ID: ");
-        htoa2(devices[i].device_id, buf); uart_printk(buf);
+        htoa(devices[i].device_id, buf); uart_printk(buf);
         uart_printk("\n");
 
         uart_printk(" | Class: ");
-        htoa2(devices[i].class_id, buf); uart_printk(buf);
+        htoa(devices[i].class_id, buf); uart_printk(buf);
         uart_printk("\n");
     }
 }

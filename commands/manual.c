@@ -18,9 +18,12 @@ void help() {
     print("Available commands:\n", 15);
     print("  help - show this message\n", 15);
     print("  status - print CPU status\n", 15);
-    print("  reboot - reboot the system\n", 15);
+    print("  reset - reset the system\n", 15);
     print("  devices - print PCI devices\n", 15);
     print("  lifetime - system timer ticks\n", 15);
+    print("  su - change to root\n", 15);
+    print("  exit - change to user\n", 15);
+    print("  whoami - print current user\n", 15);
     #else
     print("Available commands:\n", 15);
     print("  help - show this message\n", 15);

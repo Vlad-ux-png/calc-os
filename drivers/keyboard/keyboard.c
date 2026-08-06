@@ -25,23 +25,6 @@ uint8_t kbd_buffer[KBD_BUFFER_SIZE];
 volatile int kbd_head = 0;
 volatile int kbd_tail = 0;
 
-#if defined(__riscv)
-typedef void (*sig_handler_t)(int);
-
-typedef struct {
-    void* esp; 
-    uint8_t id;
-    uint8_t state;
-    uint8_t is_active;
-
-    uint32_t pending_signals; 
-    sig_handler_t signal_handlers[NUM_SIGNALS];
-} Task;
-
-Task task_list[4];
-int current_uid = 0xFFFF;
-#endif
-
 void kbd_put_scancode(uint8_t code) {
     int next = (kbd_head + 1) % KBD_BUFFER_SIZE;
     if (next != kbd_tail) { 
@@ -63,68 +46,6 @@ uint8_t get_scancode() {
 
     sti();
     return code;
-}
-
-void handle_hotkeys(int code) {
-	if (code == 0x4B) {
-		is_scaled = 0;
-		current_mode = 0;
-		is_window_crt = 0;
-		show_crt_window = 0;
-		ncount = 1;
-	}
-	if (code == 0x4D) {
-		is_scaled = 0;
-		current_mode = 1;
-		ncount = 1;
-	}
-
-	if (code == 0x3C && current_mode == 1) {
-		show_crt_window = 1;
-		is_window_crt = 0;
-		ncount = 1;
-	}
-
-	if (code == 0x1C && current_mode == 1 && is_button_files == 1) {
-		current_mode = 2;
-		ncount = 1;
-	}
-	if (code == 0x50 && current_mode == 1 && is_button_files == 1) {
-		is_button_apps = 1;
-		is_button_files = 0;
-		ncount = 1;
-	}
-	if (code == 0x1C && current_mode == 1 && is_button_apps == 1) {
-		current_mode = 3;
-		ncount = 1;
-	}
-	if (code == 0x48 && current_mode == 1 && is_button_apps == 1) {
-		is_button_apps = 0;
-		is_button_files = 1;
-		current_mode = 1;
-		ncount = 1;
-	}
-	if (code == 0x5B) {
-		is_scaled = 0;
-		is_button_calc = 1;
-		ncount = 1;
-	}
-    if (code == 0x2E && ctrl_pressed == 1) { 
-        if (current_uid != 0) {
-            if (task_list[2].is_active) {
-                send_signal(2, SIGINT); 
-                return;
-            }
-        } else {
-            if (task_list[2].is_active) {
-                send_signal(2, SIGINT); 
-            } else {
-                send_signal(0, SIGINT); 
-			}
-			
-            return;
-        }
-	}
 }
 
 void input_wait_string(char *buffer) {

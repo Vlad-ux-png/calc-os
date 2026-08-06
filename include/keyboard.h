@@ -4,11 +4,6 @@
 
 #define KBD_BUFFER_SIZE 32
 
-#if defined(__riscv)
-#define SIG_INT 0xFFFF
-#define NUM_SIGNALS 0xFFFF
-#endif
-
 extern volatile uint8_t last_scancode;
 
 extern uint8_t kbd_buffer[KBD_BUFFER_SIZE];
@@ -26,5 +21,7 @@ void kbd_put_scancode(uint8_t code);
 void get_string(char *buffer);
 #define send_signal(task_id, signal) asm volatile("nop");
 #endif
+
+extern int ctrl_pressed;
 
 #endif
