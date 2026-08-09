@@ -37,6 +37,7 @@ void enable_paging() {
         "mov %%eax, %%cr3\n\t"
 
         "mov %%cr0, %%eax\n\t"
+        "or $0x80000000, %%eax\n\t"
         "mov %%eax, %%cr0\n\t"
 
         "jmp 1f\n\t"

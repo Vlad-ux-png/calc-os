@@ -46,9 +46,9 @@ refresh:
         #endif
     }
 
-    draw_rect(0, 0, 1024, 40, 7);
+    draw_rect(0, 0, 1024, 40, COLOR_LIGHT_GRAY);
 
-    draw_button(10, 5, 56, 26, "CalcOS", 0, 15);
+    draw_button(10, 5, 56, 26, "CalcOS", COLOR_BLACK, COLOR_WHITE);
 
     cli();
 
@@ -66,16 +66,16 @@ refresh:
         if (current_mode == 0) {
             is_scaled = 2;
             if (current_uid == 0) {
-                print("# ", 15);
+                print("# ", COLOR_WHITE);
             } else {
-                print("$ ", 15);
+                print("$ ", COLOR_WHITE);
             }
             
             input_wait_string(command);
 
             if (ncount == 1) goto refresh;
 
-            print("\n", 15);
+            print("\n", COLOR_WHITE);
 
             char *command2 = strtok(command, " ");
 
@@ -92,13 +92,13 @@ refresh:
                 else if (compare_strings(command, "casm")) {
                     char *asm_name = strtok(NULL, " ");
                     if (asm_name == NULL) {
-                        print("Usage: casm <asm_file>\n", 15);
+                        print("Usage: casm <asm_file>\n", COLOR_WHITE);
                         continue;
                     }
 
                     int fd = vfs_open(asm_name);
                     if (fd < 0) {
-                        print("casm: File not found\n", 15);
+                        print("casm: File not found\n", COLOR_WHITE);
                         continue;
                     }
 
@@ -107,9 +107,9 @@ refresh:
                     vfs_close(fd);
 
                     name_clear();
-                    print("Out file name: ", 15);
+                    print("Out file name: ", COLOR_WHITE);
                     input_wait_string(name);
-                    print("\n", 15);
+                    print("\n", COLOR_WHITE);
                     assemble_to_bin(name, buffer);
                 }
                 else if (compare_strings(command, "empire")) {
@@ -118,13 +118,13 @@ refresh:
                 else if (compare_strings(command, "cat")) {
                     char *file_name = strtok(NULL, " ");
                     if (file_name == NULL) {
-                        print("Usage: cat <file_name>\n", 15);
+                        print("Usage: cat <file_name>\n", COLOR_WHITE);
                         continue;
                     }
 
                     int fd = vfs_open(file_name);
                     if (fd < 0) {
-                        print("cat: File not found\n", 15);
+                        print("cat: File not found\n", COLOR_WHITE);
                         continue;
                     }
 
@@ -139,12 +139,12 @@ refresh:
                             if (c == '\0' || (uint8_t)c == 0xE5 || (uint8_t)c == 0xFF) {
                                 break;
                             }
-                            put_char(c, 15);
+                            put_char(c, COLOR_WHITE);
                         }
                     } else {
-                        print("cat: Empty or unreadable file\n", 15);
+                        print("cat: Empty or unreadable file\n", COLOR_WHITE);
                     }
-                    print("\n", 15);
+                    print("\n", COLOR_WHITE);
                 }
                 else if (compare_strings(command, "cln")) {
                     cln();
@@ -152,7 +152,7 @@ refresh:
                 else if (compare_strings(command, "touch")) {
                     char *file_name = strtok(NULL, " ");
                     if (file_name == NULL) {
-                        print("Usage: touch <file_name>\n", 15);
+                        print("Usage: touch <file_name>\n", COLOR_WHITE);
                         continue;
                     }
 
@@ -160,14 +160,14 @@ refresh:
                     content_clear();
                     screen_clear();
 
-                    draw_rect(0, 0, 1024, 30, 7); 
+                    draw_rect(0, 0, 1024, 30, COLOR_LIGHT_GRAY); 
                     x = 10; y = 8;
-                    print("Editing: ", 0);
-                    print(file_name, 0); 
+                    print("Editing: ", COLOR_BLACK);
+                    print(file_name, COLOR_BLACK); 
 
-                    draw_rect(0, 738, 1024, 30, 7); 
+                    draw_rect(0, 738, 1024, 30, COLOR_LIGHT_GRAY); 
                     x = 10; y = 746;
-                    print("F2: Save and Exit", 0);
+                    print("F2: Save and Exit", COLOR_BLACK);
 
                     x = 0; y = 40;
 
@@ -194,7 +194,7 @@ refresh:
                         if (code == 0x1C) { 
                             if (buffer_ptr < 511) {
                                 file_buffer[buffer_ptr++] = '\n';
-                                put_char('\n', 15); 
+                                put_char('\n', COLOR_WHITE); 
                             }
                             continue;
                         }
@@ -204,7 +204,7 @@ refresh:
                                 buffer_ptr--;
                                 if (file_buffer[buffer_ptr] != '\n') {
                                     x = x - 8; 
-                                    draw_rect(x, y, 8, 8, 0); 
+                                    draw_rect(x, y, 8, 8, COLOR_BLACK); 
                                 }
                                 file_buffer[buffer_ptr] = 0;
                             }
@@ -268,7 +268,7 @@ refresh:
                         }
 
                         if (letter != 0 && buffer_ptr < 511) {
-                            put_char(letter, 15); 
+                            put_char(letter, COLOR_WHITE); 
                             file_buffer[buffer_ptr] = letter;
                             buffer_ptr++;
                         }
@@ -277,7 +277,7 @@ refresh:
                 else if (compare_strings(command, "send")) {
                     char *packet_data = strtok(NULL, " ");
                     if (packet_data == NULL) {
-                        print("Usage: send <message_text>\n", 15);
+                        print("Usage: send <message_text>\n", COLOR_WHITE);
                         continue;
                     }
 
@@ -289,7 +289,7 @@ refresh:
                 else if (compare_strings(command, "forth")) {
                     char *forth_name = strtok(NULL, " ");
                     if (forth_name == NULL) {
-                        print("Usage: forth <file_name>\n", 15);
+                        print("Usage: forth <file_name>\n", COLOR_WHITE);
                         continue;
                     }
 
@@ -329,7 +329,7 @@ refresh:
                         if (start_cluster != 0) {
                             sys_exec(cmd_file_fat);
                         } else {
-                            print("Unknown command. Type 'help'\n", 15);
+                            print("Unknown command. Type 'help'\n", COLOR_WHITE);
                         }
                     }
                 }
@@ -367,7 +367,7 @@ refresh:
 
                 if (ncount == 1) goto refresh;
 
-                print("\n", 15);
+                print("\n", COLOR_WHITE);
 
                 int len = 0;
                 while (content[len] != '\0') len++;
@@ -405,36 +405,39 @@ refresh:
 void boot() {
     is_scaled = 1;
     screen_clear();
-    print("Booting CalcOS...\n", 15);
 
-    print("Scanning devices...\n", 15);
+    print("Scanning PCI...      ", COLOR_WHITE);
     pci_scan();
+    print("[OK]\n", COLOR_WHITE);
 
+    print("Initializing memory manager...      ", COLOR_WHITE);
     init_memory_manager();
-    print("[OK]\n", 15);
+    print("[OK]\n", COLOR_WHITE);
 
+    print("Initializing ethernet card...      ", COLOR_WHITE);
     int is_rtl8139_found = rtl8139_find();
     if (is_rtl8139_found) {
         rtl8139_init();
-        print("[OK]\n", 15);
+        print("[OK]\n", COLOR_WHITE);
     } else {
-        print("[ERR]\n", 15);
+        print("[ERR]\n", COLOR_WHITE);
     }
 
+    print("Mounting FAT12 filesystem...      ", COLOR_WHITE);
     vfs_mount("/", &fat12_driver);
-    print("[OK]\n", 15);
+    print("[OK]\n", COLOR_WHITE);
 
     delay_ticks(50);
 
     screen_clear();
     init_palette();
-    draw_rect(0, 0, 1024, 768, 15);
+    draw_rect(0, 0, 1024, 768, COLOR_WHITE);
 
     x = 0;
     y = 10;
 
     is_scaled = 1;
-    print("Welcome to CalcOS!", 0);
+    print("Welcome to CalcOS!", COLOR_BLACK);
     is_scaled = 2;
     play_startup_sound();
 

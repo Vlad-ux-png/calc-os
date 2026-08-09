@@ -19,6 +19,7 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
     init_memory_manager();
     pci_scan();
 	init_timer();
+    sd_init();
     
     while(1) {
         if (current_uid == 0) {

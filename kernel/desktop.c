@@ -22,29 +22,37 @@
 #endif
 
 static const uint8_t fade_palette[24] = {
-    15, 15, 19, 19, 19, 19, 7,  7, 
-    7,  7,  18, 18, 18, 8,  8,  8, 
-    20, 20, 20, 20, 20, 20, 20, 20
+    COLOR_WHITE, COLOR_WHITE, COLOR_SYS_LIGHT, 
+    COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, 
+    COLOR_LIGHT_GRAY,  COLOR_LIGHT_GRAY, 
+    COLOR_LIGHT_GRAY,  COLOR_LIGHT_GRAY, 
+    COLOR_SYS_SHADOW,  COLOR_SYS_SHADOW, 
+    COLOR_SYS_SHADOW,  COLOR_DARK_GRAY, 
+    COLOR_DARK_GRAY,  COLOR_DARK_GRAY, 
+    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE, 
+    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE,
+    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE,  
+    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE
 };
 
 void draw_desktop() {
 #if defined(__riscv)
     return; 
 #else
-    draw_rect(0, 40, 1024, 728, 20);
+    draw_rect(0, 40, 1024, 728, COLOR_ACCENT_BLUE);
 
     int glass_x = 60;
     int glass_y = 180;
     int glass_w = 500;
     int glass_h = 320;
 
-    draw_rect(glass_x, glass_y, glass_w, 2, 15);
-    draw_rect(glass_x, glass_y, 2, glass_h, 15);
-    draw_rect(glass_x, glass_y + glass_h, glass_w, 2, 18);
-    draw_rect(glass_x + glass_w, glass_y, 2, glass_h, 18);
+    draw_rect(glass_x, glass_y, glass_w, 2, COLOR_WHITE);
+    draw_rect(glass_x, glass_y, 2, glass_h, COLOR_WHITE);
+    draw_rect(glass_x, glass_y + glass_h, glass_w, 2, COLOR_SYS_SHADOW);
+    draw_rect(glass_x + glass_w, glass_y, 2, glass_h, COLOR_SYS_SHADOW);
 
-    draw_rect(glass_x + 6, glass_y + glass_h + 6, glass_w, 4, 0); 
-    draw_rect(glass_x + glass_w + 6, glass_y + 6, 4, glass_h, 0);
+    draw_rect(glass_x + 6, glass_y + glass_h + 6, glass_w, 4, COLOR_BLACK); 
+    draw_rect(glass_x + glass_w + 6, glass_y + 6, 4, glass_h, COLOR_BLACK);
 
     char *text = "CalcOS";
     int text_x = glass_x + 40;
@@ -53,10 +61,10 @@ void draw_desktop() {
 
     is_scaled = 1;
     x = text_x + 3; y = text_y + 3;
-    print(text, 0);
+    print(text, COLOR_BLACK);
 
     x = text_x; y = text_y;
-    print(text, 15);
+    print(text, COLOR_WHITE);
     is_scaled = 0;
 
     int reflect_y = text_y + 24 + 2; 
@@ -107,26 +115,26 @@ void graphics() {
     #else
     if (current_mode == 0) {
         if (draw_0 == 1) {
-            draw_rect(0, 40, 1024, 728, 0);
+            draw_rect(0, 40, 1024, 728, COLOR_BLACK);
 
             if (draw_0 == 1) {
-                draw_button(78, 5, 136, 26, "Terminal", COLOR_RED, 15);
-                draw_button(191, 11, 15, 15, "x", 15, 0);
+                draw_button(78, 5, 136, 26, "Terminal", COLOR_RED, COLOR_WHITE);
+                draw_button(191, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
             }
 
             if (draw_1 == 1) {
-                draw_button(238, 5, 136, 26, "Explorer", COLOR_GREEN, 0);
-                draw_button(351, 11, 15, 15, "x", 15, 0);
+                draw_button(238, 5, 136, 26, "Explorer", COLOR_GREEN, COLOR_WHITE);
+                draw_button(351, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
             }
 
             if (is_button_calc == 1) {
-                draw_rect(10, 31, 72, 70, 7);
+                draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
-                draw_button(10, 31, 70, 26, "Terminal", COLOR_RED, 15);
-                draw_button(10, 51, 70, 26, "Explorer", COLOR_GREEN, 0);
+                draw_button(10, 31, 70, 26, "Terminal", COLOR_RED, COLOR_WHITE);
+                draw_button(10, 51, 70, 26, "Explorer", COLOR_GREEN, COLOR_BLACK);
 
-                draw_button(10, 85, 15, 15, "x", 0, 15);
-                draw_button(65, 85, 15, 15, "r", 0, 15);
+                draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
+                draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
             }
 
             x = 0;
@@ -141,26 +149,26 @@ void graphics() {
         draw_desktop();
 
         if (draw_0 == 1) {
-            draw_button(78, 5, 136, 26, "Terminal", COLOR_GREEN, 15);
-            draw_button(191, 11, 15, 15, "x", 15, 0);
+            draw_button(78, 5, 136, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
+            draw_button(191, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
         }
 
         if (draw_1 == 1) {
-            draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, 0);
-            draw_button(351, 11, 15, 15, "x", 15, 0);
+            draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, COLOR_WHITE);
+            draw_button(351, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
         }
 
         if (is_button_calc == 1) {
-            draw_rect(10, 31, 72, 70, 7);
+            draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
-            draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, 15);
-            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, 0);
+            draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
+            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_BLACK);
 
-            draw_button(10, 85, 15, 15, "x", 0, 15);
-            draw_button(65, 85, 15, 15, "r", 0, 15);
+            draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
+            draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
         }
 
-        draw_button(0, 728, 1024, 40, "F2 - create a new file", COLOR_BLUE, 15);
+        draw_button(0, 728, 1024, 40, "F2 - create a new file", COLOR_BLUE, COLOR_WHITE);
 
         draw_file_icons();
 
@@ -170,60 +178,60 @@ void graphics() {
             int wx = win_file_x; 
             int wy = win_file_y;
 
-            draw_rect(wx + 4, wy + 4, 432, 260, 0);
-            draw_rect(wx,     wy,     432, 260, 15);
-            draw_rect(wx + 4, wy + 4, 424, 252, 7);
-            draw_rect(wx + 4, wy + 4, 424, 32, 0);
+            draw_rect(wx + 4, wy + 4, 432, 260, COLOR_BLACK);
+            draw_rect(wx,     wy,     432, 260, COLOR_WHITE);
+            draw_rect(wx + 4, wy + 4, 424, 252, COLOR_LIGHT_GRAY);
+            draw_rect(wx + 4, wy + 4, 424, 32, COLOR_BLACK);
 
             x = wx + 18;
             y = wy + 8;
-            print("Create a new file", 15);
+            print("Create a new file", COLOR_WHITE);
 
             x = wx + 18;
             y = wy + 44;
-            print("Name:", 15);
-            draw_rect(wx + 18, wy + 56, 404, 24, 15);
-            draw_rect(wx + 20, wy + 58, 400, 20, 0);
+            print("Name:", COLOR_WHITE);
+            draw_rect(wx + 18, wy + 56, 404, 24, COLOR_WHITE);
+            draw_rect(wx + 20, wy + 58, 400, 20, COLOR_BLACK);
 
             x = wx + 18;
             y = wy + 94;
-            print("Content:", 15);
-            draw_rect(wx + 18, wy + 146, 404, 24, 15); 
-            draw_rect(wx + 20, wy + 148, 400, 20, 0);
+            print("Content:", COLOR_WHITE);
+            draw_rect(wx + 18, wy + 146, 404, 24, COLOR_WHITE); 
+            draw_rect(wx + 20, wy + 148, 400, 20, COLOR_BLACK);
         }
     }
     else if (current_mode == 3) {
         draw_desktop();
         
         if (draw_0 == 1) {
-            draw_button(78, 5, 136, 26, "Terminal", COLOR_GREEN, 15);
-            draw_button(191, 11, 15, 15, "x", 15, 0);
+            draw_button(78, 5, 136, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
+            draw_button(191, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
         }
 
         if (draw_1 == 1) {
-            draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, 0);
-            draw_button(351, 11, 15, 15, "x", 15, 0);
+            draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, COLOR_BLACK);
+            draw_button(351, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
         }
 
         if (is_button_calc == 1) {
-            draw_rect(10, 31, 72, 70, 7);
+            draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
-            draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, 15);
-            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, 0);
+            draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
+            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_BLACK);
 
-            draw_button(10, 85, 15, 15, "x", 0, 15);
-            draw_button(65, 85, 15, 15, "r", 0, 15);
+            draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
+            draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
         }
 
         x = 0;
         y = 96;
-        print("System Information:\n", 15);
-        print("Battery Status: ", 15);
+        print("System Information:\n", COLOR_WHITE);
+        print("Battery Status: ", COLOR_WHITE);
         unsigned char battery_status = check_battery();
         if (battery_status) {
-            print("OK\n", 15);
+            print("OK\n", COLOR_WHITE);
         } else {
-            print("BAD. Please insert a new CMOS battery\n", 15);
+            print("BAD. Please insert a new CMOS battery\n", COLOR_WHITE);
         }
     }
     else {
@@ -233,32 +241,32 @@ void graphics() {
                 draw_desktop();
 
             if (draw_0 == 1) {
-                draw_button(78, 5, 136, 26, "Terminal", COLOR_GREEN, 15);
-                draw_button(191, 11, 15, 15, "x", 15, 0);
+                draw_button(78, 5, 136, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
+                draw_button(191, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
             }
 
             if (draw_1 == 1) {
-                draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, 0);
-                draw_button(351, 11, 15, 15, "x", 15, 0);
+                draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, COLOR_WHITE);
+                draw_button(351, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
             }
 
             if (is_button_calc == 1) {
-                draw_rect(10, 31, 72, 70, 7);
+                draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
-                draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, 15);
-                draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, 0);
+                draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
+                draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_BLACK);
 
-                draw_button(10, 85, 15, 15, "x", 0, 15);
-                draw_button(65, 85, 15, 15, "r", 0, 15);
+                draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
+                draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
             }
 
             if (is_button_files == 1) {
-                draw_button(352, 250, 320, 36, "Files", COLOR_RED, 0);
-                draw_button(352, 350, 320, 36, "System", COLOR_GREEN, 0);
+                draw_button(352, 250, 320, 36, "Files", COLOR_RED, COLOR_BLACK);
+                draw_button(352, 350, 320, 36, "System", COLOR_GREEN, COLOR_BLACK);
             }
             else if (is_button_apps == 1) {
-                draw_button(352, 250, 320, 36, "Files", COLOR_GREEN, 0);
-                draw_button(352, 350, 320, 36, "System", COLOR_RED, 0);
+                draw_button(352, 250, 320, 36, "Files", COLOR_GREEN, COLOR_BLACK);
+                draw_button(352, 350, 320, 36, "System", COLOR_RED, COLOR_BLACK);
             } 
         } else {
             current_mode = 0;

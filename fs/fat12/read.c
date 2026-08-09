@@ -121,7 +121,7 @@ void draw_file_icons() {
             int icon_x = 20 + col * 180;
             int icon_y = 100 + row * 100;
 
-            draw_rounded_rect(icon_x, icon_y, 130, 30, 4, 15);
+            draw_rounded_rect(icon_x, icon_y, 130, 30, 4, COLOR_WHITE);
 
             char name_buf[9];
             char ext_buf[4];
@@ -144,10 +144,10 @@ void draw_file_icons() {
 
             x = icon_x + 8;
             y = icon_y + 8;
-            printk(name_buf, 0);
+            printk(name_buf, COLOR_BLACK);
             if (ext_len > 0) {
-                printk(".", 0);
-                printk(ext_buf, 0);
+                printk(".", COLOR_BLACK);
+                printk(ext_buf, COLOR_BLACK);
             }
 
             icon_index++;

@@ -154,12 +154,12 @@ void input_wait_string(char *buffer) {
                     if (is_window_crt == 0 && current_mode == 0) {
                         if (x > 32) { 
                             x -= 16; 
-                            draw_rect(x, y, 16, 16, 0); 
+                            draw_rect(x, y, 16, 16, COLOR_BLACK); 
                         }
                     } else {
                         if (x > 48) {
                             x -= 8; 
-                            draw_rect(x, y, 8, 8, 0); 
+                            draw_rect(x, y, 8, 8, COLOR_BLACK); 
                         }
                     }
                 }
@@ -175,7 +175,7 @@ void input_wait_string(char *buffer) {
         }
 
         if (letter != 0 && i < 255) {
-            put_char(letter, 15);
+            put_char(letter, COLOR_WHITE);
             buffer[i] = letter;
             i++;
         }
