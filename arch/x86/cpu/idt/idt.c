@@ -125,11 +125,11 @@ void delay_ticks(uint32_t ticks) {
 
 void exception_handler(struct registers *regs) {
     if (current_task != 0) {
-        printk("\nprocess with PID ", 15);
+        printk("\nprocess with PID ", COLOR_WHITE);
         char num_buf[16];
         itoa(current_task, num_buf);
-        printk(num_buf, 15);
-        printk(" crashed.\n", 15);
+        printk(num_buf, COLOR_WHITE);
+        printk(" crashed.\n", COLOR_WHITE);
         
         task_list[current_task].is_active = 0;
 
@@ -164,58 +164,61 @@ void exception_handler(struct registers *regs) {
     x = 10;
     y = 10;
     
-    printk("KERNEL FATAL: ", 15);
+    printk("KERNEL FATAL: ", COLOR_WHITE);
     
-    if (regs->int_no == 0) printk("DIVISION BY ZERO", 15);
-    else if (regs->int_no == 1) printk("DEBUG", 15);
-    else if (regs->int_no == 2) printk("NON MASKABLE INTERRUPT", 15);
-    else if (regs->int_no == 3) printk("BREAKPOINT", 15);
-    else if (regs->int_no == 4) printk("INTO DETECTED OVERFLOW", 15);
-    else if (regs->int_no == 5) printk("OUT OF BOUNDS", 15);
-    else if (regs->int_no == 6) printk("INVALID OPCODE", 15);
-    else if (regs->int_no == 7) printk("NO COPROCESSOR", 15);
-    else if (regs->int_no == 8) printk("DOUBLE FAULT", 15);
-    else if (regs->int_no == 9) printk("COPROCESSOR SEGMENT OVERRUN", 15);
-    else if (regs->int_no == 10) printk("BAD TSS", 15);
-    else if (regs->int_no == 11) printk("SEGMENT NOT PRESENT", 15);
-    else if (regs->int_no == 12) printk("STACK FAULT", 15);
-    else if (regs->int_no == 13) printk("GENERAL PROTECTION FAULT", 15);
-    else if (regs->int_no == 14) printk("PAGE FAULT", 15);
-    else if (regs->int_no == 15) printk("UNKNOWN INTERRUPT (RESERVED)", 15);
-    else if (regs->int_no == 16) printk("FLOATING POINT ERROR", 15);
-    else if (regs->int_no == 17) printk("ALIGNMENT CHECK", 15);
-    else if (regs->int_no == 18) printk("MACHINE CHECK", 15);
-    else if (regs->int_no == 19) printk("SIMD FLOATING POINT EXCEPTION", 15);
-    else if (regs->int_no == 20) printk("VIRTUALIZATION EXCEPTION", 15);
-    else if (regs->int_no == 21) printk("CONTROL PROTECTION EXCEPTION", 15);
-    else if (regs->int_no >= 22 && regs->int_no <= 27) printk("RESERVED EXCEPTION", 15);
-    else if (regs->int_no == 28) printk("HYPERVISOR INJECTION EXCEPTION", 15);
-    else if (regs->int_no == 29) printk("VMM COMMUNICATION EXCEPTION", 15);
-    else if (regs->int_no == 30) printk("SECURITY EXCEPTION", 15);
-    else if (regs->int_no == 31) printk("RESERVED EXCEPTION", 15);
-    else printk("UNKNOWN EXCEPTION\n", 15);
+    if (regs->int_no == 0) printk("DIVISION BY ZERO", COLOR_WHITE);
+    else if (regs->int_no == 1) printk("DEBUG", COLOR_WHITE);
+    else if (regs->int_no == 2) printk("NON MASKABLE INTERRUPT", COLOR_WHITE);
+    else if (regs->int_no == 3) printk("BREAKPOINT", COLOR_WHITE);
+    else if (regs->int_no == 4) printk("INTO DETECTED OVERFLOW", COLOR_WHITE);
+    else if (regs->int_no == 5) printk("OUT OF BOUNDS", COLOR_WHITE);
+    else if (regs->int_no == 6) printk("INVALID OPCODE", COLOR_WHITE);
+    else if (regs->int_no == 7) printk("NO COPROCESSOR", COLOR_WHITE);
+    else if (regs->int_no == 8) printk("DOUBLE FAULT", COLOR_WHITE);
+    else if (regs->int_no == 9) printk("COPROCESSOR SEGMENT OVERRUN", COLOR_WHITE);
+    else if (regs->int_no == 10) printk("BAD TSS", COLOR_WHITE);
+    else if (regs->int_no == 11) printk("SEGMENT NOT PRESENT", COLOR_WHITE);
+    else if (regs->int_no == 12) printk("STACK FAULT", COLOR_WHITE);
+    else if (regs->int_no == 13) printk("GENERAL PROTECTION FAULT", COLOR_WHITE);
+    else if (regs->int_no == 14) printk("PAGE FAULT", COLOR_WHITE);
+    else if (regs->int_no == 15) printk("UNKNOWN INTERRUPT (RESERVED)", COLOR_WHITE);
+    else if (regs->int_no == 16) printk("FLOATING POINT ERROR", COLOR_WHITE);
+    else if (regs->int_no == 17) printk("ALIGNMENT CHECK", COLOR_WHITE);
+    else if (regs->int_no == 18) printk("MACHINE CHECK", COLOR_WHITE);
+    else if (regs->int_no == 19) printk("SIMD FLOATING POINT EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no == 20) printk("VIRTUALIZATION EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no == 21) printk("CONTROL PROTECTION EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no >= 22 && regs->int_no <= 27) printk("RESERVED EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no == 28) printk("HYPERVISOR INJECTION EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no == 29) printk("VMM COMMUNICATION EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no == 30) printk("SECURITY EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no == 31) printk("RESERVED EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no == 29) printk("VMM COMMUNICATION EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no == 30) printk("SECURITY EXCEPTION", COLOR_WHITE);
+    else if (regs->int_no == 31) printk("RESERVED EXCEPTION", COLOR_WHITE);
+    else printk("UNKNOWN EXCEPTION\n", COLOR_WHITE);
 
     x = 10;
     y = 70;
-    printk("TECHICAL INFORMATION: ", 15);
+    printk("TECHICAL INFORMATION: ", COLOR_WHITE);
     char buf[16];
     itoa(regs->int_no, buf);
-    printk("\n  INTERRUPT NO: ", 15);
-    printk(buf, 15); 
+    printk("\n  INTERRUPT NO: ", COLOR_WHITE);
+    printk(buf, COLOR_WHITE); 
 
 
-    printk("\n  EIP: ", 15);
+    printk("\n  EIP: ", COLOR_WHITE);
     char eip_buf[32];
     htoa(regs->eip, eip_buf);
-    printk(eip_buf, 15);
+    printk(eip_buf, COLOR_WHITE);
 
-    printk("\n  CS: ", 15);
+    printk("\n  CS: ", COLOR_WHITE);
     htoa(regs->cs, buf); 
-    printk(buf, 15);
+    printk(buf, COLOR_WHITE);
 
-    printk("\n  ERR CODE: ", 15);
+    printk("\n  ERR CODE: ", COLOR_WHITE);
     itoa(regs->err_code, buf); 
-    printk(buf, 15);
+    printk(buf, COLOR_WHITE);
     
     while(1);
 }
@@ -251,14 +254,14 @@ void task2_main() {
                 x = 972; y = 15;
                 
                 itoa(hours, h_str);
-                if (hours < 10) print("0", 15); 
-                print(h_str, 15);
+                if (hours < 10) print("0", COLOR_WHITE); 
+                print(h_str, COLOR_WHITE);
                 
-                print(":", 15);
+                print(":", COLOR_WHITE);
                 
                 itoa(minutes, m_str);
-                if (minutes < 10) print("0", 15); 
-                print(m_str, 15);
+                if (minutes < 10) print("0", COLOR_WHITE); 
+                print(m_str, COLOR_WHITE);
 
                 old_hours = hours;
                 old_minutes = minutes;

@@ -23,14 +23,14 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
     
     while(1) {
         if (current_uid == 0) {
-            print("# ", 15);
+            print("# ", COLOR_WHITE);
         } else {
-            print("$ ", 15);
+            print("$ ", COLOR_WHITE);
         }
 
         input_wait_string(com);
 
-        printk("\n", 15);
+        printk("\n", COLOR_WHITE);
 
         char *com2 = strtok(com, " ");
 
@@ -45,31 +45,31 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
 
                 char buf[32];
         
-                printk("Current Hart (Core) ID: ", 15);
-                itoa(hartid, buf); printk(buf, 15); printk("\n", 15);
+                printk("Current Hart (Core) ID: ", COLOR_WHITE);
+                itoa(hartid, buf); printk(buf, COLOR_WHITE); printk("\n", COLOR_WHITE);
 
-                printk("mstatus register: ", 15);
-                htoa(mstatus, buf); printk(buf, 15); printk("\n", 15);
+                printk("mstatus register: ", COLOR_WHITE);
+                htoa(mstatus, buf); printk(buf, COLOR_WHITE); printk("\n", COLOR_WHITE);
 
-                printk("Global Interrupts: ", 15);
+                printk("Global Interrupts: ", COLOR_WHITE);
                 if (mstatus & (1 << 3)) {
-                    printk("ENABLED\n", 15);
+                    printk("ENABLED\n", COLOR_WHITE);
                 } else {
-                    printk("DISABLED\n", 15);
+                    printk("DISABLED\n", COLOR_WHITE);
                 }
 
                 uint8_t mpp = (mstatus >> 11) & 0x3;
-                printk("Previous Privilege Mode: ", 15);
-                if (mpp == 3) printk("Machine Mode (M-Mode)\n", 15);
-                else if (mpp == 1) printk("Supervisor Mode (S-Mode)\n", 15);
-                else printk("User Mode (U-Mode)\n", 15);
+                printk("Previous Privilege Mode: ", COLOR_WHITE);
+                if (mpp == 3) printk("Machine Mode (M-Mode)\n", COLOR_WHITE);
+                else if (mpp == 1) printk("Supervisor Mode (S-Mode)\n", COLOR_WHITE);
+                else printk("User Mode (U-Mode)\n", COLOR_WHITE);
 
-                printk("Enabled Interrupts (mie): ", 15);
-                htoa(mie, buf); printk(buf, 15); printk("\n\n", 15);
+                printk("Enabled Interrupts (mie): ", COLOR_WHITE);
+                htoa(mie, buf); printk(buf, COLOR_WHITE); printk("\n\n", COLOR_WHITE);
             }
             else if (compare_strings(com, "reset")) {
                 if (current_uid != 0) {
-                    printk("reset: Permission denied\n", 15);
+                    printk("reset: Permission denied\n", COLOR_WHITE);
                     continue;
                 }
 
@@ -97,8 +97,8 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
             }
             else if (compare_strings(com, "lifetime")) {
                 itoa(timer_ticks, buffer);
-                printk(buffer, 15);
-                printk("\n", 15);
+                printk(buffer, COLOR_WHITE);
+                printk("\n", COLOR_WHITE);
             }
             else if (compare_strings(com, "su")) {
                su();
@@ -108,14 +108,14 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
             }
             else if (compare_strings(com, "whoami")) {
                 if (current_uid != 0) {
-                    printk("user\n", 15);
+                    printk("user\n", COLOR_WHITE);
                 } else {
-                    printk("root\n", 15);
+                    printk("root\n", COLOR_WHITE);
                 }
             }
             else {
                 if (com[0] != '\0') {
-                    printk("Unknown command. Type 'help'\n", 15);
+                    printk("Unknown command. Type 'help'\n", COLOR_WHITE);
                 }
             }
         }

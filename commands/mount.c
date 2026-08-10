@@ -1,14 +1,4 @@
-#define SYS_EXIT        1
-#define SYS_WRITE       4
-#define SYS_WAIT_STRING 129
-#define SYS_MOUNT       165
-#define SYS_GETUID      24
-
-static inline int _syscall(int num, unsigned int arg1, unsigned int arg2, unsigned int arg3) {
-    int ret;
-    __asm__ __volatile__ ("int $0x80" : "=a" (ret) : "a" (num), "b" (arg1), "c" (arg2), "d" (arg3) : "memory");
-    return ret;
-}
+#include <stdio.h>
 
 __attribute__((section(".text.prologue")))
 void _start() {

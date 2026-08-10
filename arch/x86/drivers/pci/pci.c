@@ -216,32 +216,32 @@ const char* pci_class_to_string(uint8_t class_id) {
 
 void pci_print_devices() {
     if (device_count == 0) {
-        print("No PCI devices found.\n", 15);
+        print("No PCI devices found.\n", COLOR_WHITE);
         return;
     }
 
     for (int i = 0; i < device_count; i++) {
         char buf[16];
         
-        print("[", 15);
-        itoa(devices[i].bus, buf); print(buf, 15); print(":", 15);
-        itoa(devices[i].slot, buf); print(buf, 15); print(".", 15);
-        itoa(devices[i].func, buf); print(buf, 15); print("] ", 15);
+        print("[", COLOR_WHITE);
+        itoa(devices[i].bus, buf); print(buf, COLOR_WHITE); print(":", COLOR_WHITE);
+        itoa(devices[i].slot, buf); print(buf, COLOR_WHITE); print(".", COLOR_WHITE);
+        itoa(devices[i].func, buf); print(buf, COLOR_WHITE); print("] ", COLOR_WHITE);
         
-        print(pci_class_to_string(devices[i].class_id), 15);
-        print("\n", 15);
+        print(pci_class_to_string(devices[i].class_id), COLOR_WHITE);
+        print("\n", COLOR_WHITE);
 
-        print("  Vendor: ", 15); 
-        htoa(devices[i].vendor_id, buf); print(buf, 15);
-        print(" (", 15); print(pci_vendor_to_string(devices[i].vendor_id), 15); print(")", 15);
-        print("\n", 15);
+        print("  Vendor: ", COLOR_WHITE); 
+        htoa(devices[i].vendor_id, buf); print(buf, COLOR_WHITE);
+        print(" (", COLOR_WHITE); print(pci_vendor_to_string(devices[i].vendor_id), COLOR_WHITE); print(")", COLOR_WHITE);
+        print("\n", COLOR_WHITE);
 
-        print(" | Device ID: ", 15);
-        htoa(devices[i].device_id, buf); print(buf, 15);
-        print("\n", 15);
+        print(" | Device ID: ", COLOR_WHITE);
+        htoa(devices[i].device_id, buf); print(buf, COLOR_WHITE);
+        print("\n", COLOR_WHITE);
 
-        print(" | Class: ", 15);
-        htoa(devices[i].class_id, buf); print(buf, 15);
-        print("\n", 15);
+        print(" | Class: ", COLOR_WHITE);
+        htoa(devices[i].class_id, buf); print(buf, COLOR_WHITE);
+        print("\n", COLOR_WHITE);
     }
 }

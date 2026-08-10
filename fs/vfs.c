@@ -72,8 +72,8 @@ int vfs_list(const char* path) {
 
 void list_mounts() {
     for (int i = 0; i < mount_count; i++) {
-        print(mounts[i].path, 15);
-        printk(":\n", 15);
+        print(mounts[i].path, COLOR_WHITE);
+        printk(":\n", COLOR_WHITE);
 
         if (mounts[i].driver->list) {
             mounts[i].driver->list_basic();   

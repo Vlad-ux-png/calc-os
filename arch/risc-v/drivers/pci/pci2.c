@@ -196,32 +196,32 @@ const char* pci_class_to_string(uint8_t class_id) {
 
 void pci_print_devices() {
     if (device_count == 0) {
-        uart_printk("No PCI devices found.\n");
+        printk("No PCI devices found.\n", COLOR_WHITE);
         return;
     }
 
     for (int i = 0; i < device_count; i++) {
         char buf[16];
         
-        uart_printk("[");
-        itoa(devices[i].bus, buf); uart_printk(buf); uart_printk(":");
-        itoa(devices[i].slot, buf); uart_printk(buf); uart_printk(".");
-        itoa(devices[i].func, buf); uart_printk(buf); uart_printk("] ");
+        printk("[", COLOR_WHITE);
+        itoa(devices[i].bus, buf); printk(buf, COLOR_WHITE); printk(":", COLOR_WHITE);
+        itoa(devices[i].slot, buf); printk(buf, COLOR_WHITE); printk(".", COLOR_WHITE);
+        itoa(devices[i].func, buf); printk(buf, COLOR_WHITE); printk("] ", COLOR_WHITE);
         
-        uart_printk(pci_class_to_string(devices[i].class_id));
-        uart_printk("\n");
+        printk(pci_class_to_string(devices[i].class_id), COLOR_WHITE);
+        printk("\n", COLOR_WHITE);
 
-        uart_printk("  Vendor: "); 
-        htoa(devices[i].vendor_id, buf); uart_printk(buf);
-        uart_printk(" ("); uart_printk(pci_vendor_to_string(devices[i].vendor_id)); uart_printk(")");
-        uart_printk("\n");
+        printk("  Vendor: ", COLOR_WHITE); 
+        htoa(devices[i].vendor_id, buf); printk(buf, COLOR_WHITE);
+        printk(" (", COLOR_WHITE); printk(pci_vendor_to_string(devices[i].vendor_id), COLOR_WHITE); printk(")", COLOR_WHITE);
+        printk("\n", COLOR_WHITE);
 
-        uart_printk(" | Device ID: ");
-        htoa(devices[i].device_id, buf); uart_printk(buf);
-        uart_printk("\n");
+        printk(" | Device ID: ", COLOR_WHITE);
+        htoa(devices[i].device_id, buf); printk(buf, COLOR_WHITE);
+        printk("\n", COLOR_WHITE);
 
-        uart_printk(" | Class: ");
-        htoa(devices[i].class_id, buf); uart_printk(buf);
-        uart_printk("\n");
+        printk(" | Class: ", COLOR_WHITE);
+        htoa(devices[i].class_id, buf); printk(buf, COLOR_WHITE);
+        printk("\n", COLOR_WHITE);
     }
 }

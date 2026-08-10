@@ -69,12 +69,12 @@ void load_root_directory() {
         }
         ext_buf[ext_len] = '\0';
 
-        printk(name_buf, 1);
+        printk(name_buf, COLOR_WHITE);
         if (ext_len > 0) {
-            printk(".", 1);
-            printk(ext_buf, 1);
+            printk(".", COLOR_WHITE);
+            printk(ext_buf, COLOR_WHITE);
         }
-        printk("\n", 0); 
+        printk("\n", COLOR_BLACK); 
     }
 }
 
@@ -87,7 +87,7 @@ uint16_t find_file_in_root(const char* target_name_11) {
     uint32_t root_lba = bpb->reserved_sectors + (bpb->num_fats * bpb->fat_size_sectors);
 
     if (bpb->bytes_per_sector == 0) {
-        printk("FATAL: RAM disk memory is empty or corrupted.\n", 15);
+        printk("FATAL: RAM disk memory is empty or corrupted.\n", COLOR_WHITE);
         return 0; 
     }
 

@@ -108,6 +108,7 @@ extern volatile int mouse_ready;
 #define SYS_WAIT_STRING  129
 #define SYS_REBOOT       130
 #define SYS_BEHAVE       131
+#define SYS_GET_COLOR    132
 
 #define EPERM            1
 #define ENOENT           2

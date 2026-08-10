@@ -224,6 +224,11 @@ uint32_t syscall_handler(struct registers *regs) {
             break;
         } 
 
+        case SYS_GET_COLOR: {
+            ret_val = COLOR_WHITE;
+            break;
+        }
+
         default:
             ret_val = -ENOSYS; 
             break;
