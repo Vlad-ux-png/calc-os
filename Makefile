@@ -199,7 +199,7 @@ re:
 	$(MAKE)
 
 dd:
-	sudo umount /dev/mmcblk0*
+	-sudo umount /dev/mmcblk0*
 	sudo dd if=os-image.img of=/dev/mmcblk0 status=progress conv=fsync
 
 rea:
