@@ -34,7 +34,7 @@ else ifeq ($(ARCH),riscv)
     LDFLAGS     := -m elf32lriscv -T arch/risc-v/linker_riscv.ld --nostdlib --static
 
     OBJ := boot.o riscv_init.o mm.o uart.o video.o font.o keybrd.o manual.o \
-	       convert.o string.o pci2.o timer.o keyboard.o sd.o
+	       convert.o string.o pci2.o timer.o keyboard.o 
 endif
 
 vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/tasks mm arch/x86/cpu/paging \
@@ -43,7 +43,7 @@ vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/task
           arch/x86/drivers/pci arch/x86/drivers/rtl8139 fs/vfs \
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
 		  drivers/keybrd  arch/risc-v/drivers/pci drivers/keybrd arch/risc-v/cpu/timer fs \
-          arch/x86/drivers/keyboard arch/risc-v/drivers/sd
+          arch/x86/drivers/keyboard 
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot 

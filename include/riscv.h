@@ -66,8 +66,4 @@ int cmp_strings(const char *str1, const char *str2);
 #define cli() __asm__ __volatile__ ("nop");
 #define sti() __asm__ __volatile__ ("nop");
 
-void sd_init();
-void sd_read_sector(uint32_t lba, uint8_t *buf);
-void sd_write_sector(uint32_t lba, const uint8_t *buf);
-
 #endif

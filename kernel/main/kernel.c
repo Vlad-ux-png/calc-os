@@ -406,28 +406,30 @@ void boot() {
     is_scaled = 1;
     screen_clear();
 
-    print("Scanning PCI...        ", COLOR_WHITE);
+    print("Scanning PCI...                              ", COLOR_WHITE);
     pci_scan();
-    print("[OK]\n", COLOR_WHITE);
+    print("[OK]\n\n", COLOR_WHITE);
 
-    print("Initializing memory manager...        ", COLOR_WHITE);
+    print("Initializing memory manager...               ", COLOR_WHITE);
     init_memory_manager();
-    print("[OK]\n", COLOR_WHITE);
+    print("[OK]\n\n", COLOR_WHITE);
 
-    print("Initializing ethernet card...        ", COLOR_WHITE);
+    print("Initializing ethernet card...                ", COLOR_WHITE);
     int is_rtl8139_found = rtl8139_find();
     if (is_rtl8139_found) {
         rtl8139_init();
-        print("[OK]\n", COLOR_WHITE);
+        print("[OK]\n\n", COLOR_WHITE);
     } else {
-        print("[ERR]\n", COLOR_WHITE);
+        print("[ERR]\n\n", COLOR_WHITE);
     }
 
-    print("Mounting FAT12 filesystem...        ", COLOR_WHITE);
+    print("Mounting FAT12 filesystem...                 ", COLOR_WHITE);
+    vfs_mount("/", &fat12_driver);
+    vfs_umount("/");
     vfs_mount("/", &fat12_driver);
     print("[OK]\n", COLOR_WHITE);
 
-    delay_ticks(50);
+    delay_ticks(100);
 
     screen_clear();
     init_palette();
