@@ -112,19 +112,6 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
                     printk("root\n", COLOR_WHITE);
                 }
             }
-            else if (compare_strings(com2, "read")) {
-                uint8_t sector_buf[512];
-                sd_read_sector(0, sector_buf); 
-                
-                printk("Sector 0 (hex): ", COLOR_WHITE);
-                char hex[4];
-                for (int i = 0; i < 16; i++) { 
-                    htoa(sector_buf[i], hex);
-                    printk(hex, COLOR_WHITE);
-                    printk(" ", COLOR_WHITE);
-                }
-                printk("\n", COLOR_WHITE);
-            }
             else {
                 if (com[0] != '\0') {
                     printk("Unknown command. Type 'help'\n", COLOR_WHITE);
