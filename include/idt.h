@@ -28,19 +28,27 @@ typedef struct {
     uint8_t used;
 } file_descriptor_t;
 
-void init_idt();
-void set_idt_gate(uint8_t number, uint32_t base, uint16_t selector, uint8_t flags);
-void pic_remap();
-void prepare_task4();
-void exception_handler(struct registers *regs);
+extern volatile int mouse_cycle;
+extern volatile uint8_t mouse_packet[3];
+extern volatile int mouse_ready;
 
-void create_task(int task_id);
-void delete_task(int task_id);
+extern unsigned int timer_ticks;
+extern uint8_t *timer_str[16];
 
-extern void timer_wrapper();
+extern volatile int ata_interrupt_received;
+
+extern volatile uint8_t mouse_packet[3];
+extern volatile int mouse_ready;
+
+extern unsigned int task2_stack[1024];
+extern unsigned int task3_stack[1024];
+extern unsigned int task4_stack[2048];
+
 extern void keyboard_wrapper();
 extern void mouse_wrapper();
 extern void ata_wrapper();
+extern void timer_wrapper();
+extern void syscall_wrapper();
 
 extern void isr0();
 extern void isr1();
@@ -75,16 +83,43 @@ extern void isr29();
 extern void isr30();
 extern void isr31();
 
+void init_idt();
+void init_timer();
+void set_idt_gate(uint8_t number, uint32_t base, uint16_t selector, uint8_t flags);
+void pic_remap();
+
+void prepare_task2();
+void prepare_task3();
+void prepare_task4();
+
+void exception_handler(struct registers *regs);
+
+void create_task(int task_id);
+void delete_task(int task_id);
+
 void delay_ticks(uint32_t ticks);
-extern void syscall_wrapper();
 
-extern unsigned int timer_ticks;
-extern uint8_t *timer_str[16];
+uint32_t syscall_handler(struct registers *regs);
 
-extern volatile int ata_interrupt_received;
+static inline int _syscall(int num, uint32_t arg1, uint32_t arg2, uint32_t arg3) {
+    int ret;
+    __asm__ __volatile__ ("int $0x80" : "=a" (ret) : "a" (num), "b" (arg1), "c" (arg2), "d" (arg3) : "memory");
+    return ret;
+}
 
-extern volatile uint8_t mouse_packet[3];
-extern volatile int mouse_ready;
+int sys_close(int fd);
+int sys_exec(const char* filename);
+void sys_exit();
+int sys_get_battery();
+int sys_getpid();
+int sys_getuid();
+int sys_open(const char* path);
+int sys_read(int fd, char* buf, uint32_t count);
+uint32_t sys_time();
+void sys_uname(char *buffer);
+int sys_write(int fd, const char* str, uint8_t color);
+
+void system();
 
 #define SYS_EXIT    1
 #define SYS_READ    3
@@ -166,33 +201,6 @@ extern volatile int mouse_ready;
 #define ECONNREFUSED    111
 
 #define ENOSYS          38
-
-uint32_t syscall_handler(struct registers *regs);
-
-extern unsigned int task2_stack[1024];
-extern unsigned int task3_stack[1024];
-extern unsigned int task4_stack[2048];
-
-static inline int _syscall(int num, uint32_t arg1, uint32_t arg2, uint32_t arg3) {
-    int ret;
-    __asm__ __volatile__ ("int $0x80" : "=a" (ret) : "a" (num), "b" (arg1), "c" (arg2), "d" (arg3) : "memory");
-    return ret;
-}
-
-int sys_close(int fd);
-int sys_exec(const char* filename);
-void sys_exit();
-int sys_get_battery();
-int sys_getpid();
-int sys_getuid();
-int sys_open(const char* path);
-int sys_read(int fd, char* buf, uint32_t count);
-uint32_t sys_time();
-void sys_uname(char *buffer);
-int sys_write(int fd, const char* str, uint8_t color);
-
-void system();
-
 
 #define cli() __asm__ __volatile__ ("cli");
 #define sti() __asm__ __volatile__ ("sti");

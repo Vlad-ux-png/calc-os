@@ -131,7 +131,7 @@ void graphics() {
                 draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
                 draw_button(10, 31, 70, 26, "Terminal", COLOR_RED, COLOR_WHITE);
-                draw_button(10, 51, 70, 26, "Explorer", COLOR_GREEN, COLOR_BLACK);
+                draw_button(10, 51, 70, 26, "Explorer", COLOR_GREEN, COLOR_WHITE);
 
                 draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
                 draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
@@ -162,7 +162,7 @@ void graphics() {
             draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
             draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
-            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_BLACK);
+            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_WHITE);
 
             draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
             draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
@@ -209,7 +209,7 @@ void graphics() {
         }
 
         if (draw_1 == 1) {
-            draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, COLOR_BLACK);
+            draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, COLOR_WHITE);
             draw_button(351, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
         }
 
@@ -217,7 +217,7 @@ void graphics() {
             draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
             draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
-            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_BLACK);
+            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_WHITE);
 
             draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
             draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
@@ -238,7 +238,7 @@ void graphics() {
         is_scaled = 0;
 
         if (draw_1 == 1) {
-                draw_desktop();
+            draw_desktop();
 
             if (draw_0 == 1) {
                 draw_button(78, 5, 136, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
@@ -254,7 +254,7 @@ void graphics() {
                 draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
                 draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
-                draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_BLACK);
+                draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_WHITE);
 
                 draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
                 draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
