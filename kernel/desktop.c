@@ -144,6 +144,7 @@ void graphics() {
             current_mode = 5;
             ncount = 1;
         }
+        is_button_calc = !is_button_calc;
     }
     else if (current_mode == 2) {
         draw_desktop();

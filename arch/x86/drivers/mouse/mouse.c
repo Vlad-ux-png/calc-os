@@ -145,6 +145,7 @@ void check_ui_clicks() {
             ncount = 1; 
         }
     }
+    
     if (mouse_left_button == 1) {
         if (mouse_x >= 238 && mouse_x <= 374 && mouse_y >= 5 && mouse_y <= 31) {
             is_scaled = 0;
@@ -181,7 +182,7 @@ void check_ui_clicks() {
 
         if (mouse_x >= 10 && mouse_x <= 66 && mouse_y >= 5 && mouse_y <= 31) {
             is_scaled = 0;
-            is_button_calc = 1;
+            is_button_calc = !is_button_calc;
             ncount = 1;
         }
 
