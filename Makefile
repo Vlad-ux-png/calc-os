@@ -11,7 +11,8 @@ ifeq ($(ARCH),x86)
     CFLAGS      := -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore \
                -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c \
                -fno-pic -fno-asynchronous-unwind-tables -fno-strict-aliasing -fpack-struct \
-			   -mno-sse 
+			   -mno-sse -mpreferred-stack-boundary=2
+
     LDFLAGS     := -m elf_i386 -T linker.ld --nostdlib --static
 
     OBJ := init.o kernel.o cmos.o video.o mouse_asm.o utils.o keyboard.o font.o inout.o \

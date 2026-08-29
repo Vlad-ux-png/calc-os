@@ -50,7 +50,7 @@ refresh:
 
     draw_button(10, 5, 56, 26, "CalcOS", COLOR_BLACK, COLOR_WHITE);
 
-    cli();
+    sti();
 
     graphics();
 
@@ -358,11 +358,11 @@ refresh:
                 int wy = win_file_y;
 
                 x = wx + 26;
-                y = wy + 60;
+                y = wy + 65;
                 input_wait_string(name);
 
                 x = wx + 26;
-                y = wy + 150;
+                y = wy + 110;
                 input_wait_string(content);
 
                 if (ncount == 1) goto refresh;

@@ -130,19 +130,34 @@ void restore_background() {
     }
 }
 
-void check_ui_clicks() {
-    if (current_mode == 2 && mouse_left_button == 1) {
-        if (mouse_x >= win_file_x && mouse_x <= (win_file_x + 432) && mouse_y >= win_file_y && mouse_y <= (win_file_y + 32)) {
-            
-            win_file_x = mouse_x - 200;
-            win_file_y = mouse_y - 16;
-            
-            if (win_file_x < 0) win_file_x = 0;
-            if (win_file_y < 40) win_file_y = 40;
-            if (win_file_x > (1024 - 432)) win_file_x = 1024 - 432;
-            if (win_file_y > (768 - 260)) win_file_y = 768 - 260;
+int grab_offset_x = 0;
+int grab_offset_y = 0;
+int is_dragging = 0;
 
-            ncount = 1; 
+void check_ui_clicks() {
+    if (current_mode == 2) {
+        if (mouse_left_button == 1) {
+            if (!is_dragging && mouse_x >= win_file_x && mouse_x <= (win_file_x + 432) && 
+                mouse_y >= win_file_y && mouse_y <= (win_file_y + 32)) {
+                
+                is_dragging = 1;
+                grab_offset_x = mouse_x - win_file_x;
+                grab_offset_y = mouse_y - win_file_y;
+            }
+            
+            if (is_dragging) {
+                win_file_x = mouse_x - grab_offset_x;
+                win_file_y = mouse_y - grab_offset_y;
+                
+                if (win_file_x < 0) win_file_x = 0;
+                if (win_file_y < 40) win_file_y = 40;
+                if (win_file_x > (1024 - 432)) win_file_x = 1024 - 432;
+                if (win_file_y > (768 - 260)) win_file_y = 768 - 260;
+
+                ncount = 1; 
+            }
+        } else {
+            is_dragging = 0;
         }
     }
     

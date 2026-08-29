@@ -179,27 +179,30 @@ void graphics() {
             int wx = win_file_x; 
             int wy = win_file_y;
 
-            draw_rect(wx + 4, wy + 4, 432, 260, COLOR_BLACK);
-            draw_rect(wx,     wy,     432, 260, COLOR_WHITE);
-            draw_rect(wx + 4, wy + 4, 424, 252, COLOR_LIGHT_GRAY);
+            draw_rect(wx + 4, wy + 4, 432, 260, COLOR_BLACK);    
+            draw_rect(wx,     wy,     432, 260, COLOR_WHITE);     
+            draw_rect(wx + 4, wy + 4, 424, 252, COLOR_LIGHT_GRAY); 
+    
             draw_rect(wx + 4, wy + 4, 424, 32, COLOR_BLACK);
-
+            
             x = wx + 18;
-            y = wy + 8;
+            y = wy + 12;
             print("Create a new file", COLOR_WHITE);
 
             x = wx + 18;
             y = wy + 44;
             print("Name:", COLOR_WHITE);
-            draw_rect(wx + 18, wy + 56, 404, 24, COLOR_WHITE);
-            draw_rect(wx + 20, wy + 58, 400, 20, COLOR_BLACK);
+            draw_rect(wx + 18, wy + 58, 396, 24, COLOR_WHITE); 
+            draw_rect(wx + 20, wy + 60, 392, 20, COLOR_BLACK); 
 
             x = wx + 18;
-            y = wy + 94;
+            y = wy + 90;
             print("Content:", COLOR_WHITE);
-            draw_rect(wx + 18, wy + 146, 404, 24, COLOR_WHITE); 
-            draw_rect(wx + 20, wy + 148, 400, 20, COLOR_BLACK);
+            draw_rect(wx + 18, wy + 104, 396, 110, COLOR_WHITE); 
+            draw_rect(wx + 20, wy + 106, 392, 106, COLOR_BLACK); 
         }
+
+        is_button_calc = 0;
     }
     else if (current_mode == 3) {
         draw_desktop();
@@ -234,6 +237,7 @@ void graphics() {
         } else {
             print("BAD. Please insert a new CMOS battery\n", COLOR_WHITE);
         }
+        is_button_calc = 0;
     }
     else {
         is_scaled = 0;
