@@ -66,6 +66,7 @@ void printk(const char *msg, uint8_t color);
 void print(const char *msg, uint8_t color);
 void draw_rect(int x, int y, int width, int height, uint8_t color);
 void draw_rounded_rect(int x, int y, int width, int height, int r, uint8_t color);
+void draw_crt_window(int wx, int wy);
 
 void update_system();
 void handle_hotkeys(int code);
