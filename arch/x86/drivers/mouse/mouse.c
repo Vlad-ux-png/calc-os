@@ -61,12 +61,12 @@ void draw_cursor(int mx, int my) {
                 int curr_y = my + row;
 
                 if (curr_x >= 0 && curr_x < SCREEN_WIDTH && curr_y >= 0 && curr_y < SCREEN_HEIGHT) {
-                    uint8_t *ptr = &VIDEO_MEMORY[curr_y * SCREEN_WIDTH + curr_x];
+                    uint32_t *ptr = &VIDEO_MEMORY[curr_y * SCREEN_WIDTH + curr_x];
 
                     if (c == 1) {
-                        *ptr = 15; 
+                        *ptr = COLOR_WHITE; 
                     } else {
-                        *ptr = 0; 
+                        *ptr = COLOR_BLACK; 
                     }
                 }
             }
@@ -74,14 +74,14 @@ void draw_cursor(int mx, int my) {
     }
 }
 
-int mouse_x = 512;
-int mouse_y = 384;
+int mouse_x = 640;
+int mouse_y = 360;
 
-int old_mouse_x = 512;
-int old_mouse_y = 384;
+int old_mouse_x = 640;
+int old_mouse_y = 360;
 int mouse_left_button = 0;
 
-uint8_t cursor_back_buffer[256];
+uint32_t cursor_back_buffer[256];
 
 void mouse_handler() {
     if (!mouse_ready) return; 
@@ -151,8 +151,8 @@ void check_ui_clicks() {
                 
                 if (win_file_x < 0) win_file_x = 0;
                 if (win_file_y < 40) win_file_y = 40;
-                if (win_file_x > (1024 - 432)) win_file_x = 1024 - 432;
-                if (win_file_y > (768 - 260)) win_file_y = 768 - 260;
+                if (win_file_x > (1280 - 432)) win_file_x = 1280 - 432;
+                if (win_file_y > (720 - 260)) win_file_y = 720 - 260;
 
                 ncount = 1; 
             }
@@ -180,17 +180,17 @@ void check_ui_clicks() {
             }
         }
 
-        if (current_mode == 1 && mouse_x >= 352 && mouse_x <= 672 && mouse_y >= 250 && mouse_y <= 286) {
+        if (current_mode == 1 && mouse_x >= 480 && mouse_x <= 800 && mouse_y >= 250 && mouse_y <= 286) {
             current_mode = 2;
             ncount = 1;
         }
 
-        if (current_mode == 1 && mouse_x >= 352 && mouse_x <= 672 && mouse_y >= 350 && mouse_y <= 386) {
+        if (current_mode == 1 && mouse_x >= 480 && mouse_x <= 800 && mouse_y >= 350 && mouse_y <= 386) {
             current_mode = 3;
             ncount = 1;
         }
 
-        if (current_mode == 2 && mouse_y >= 728 && mouse_y <= SCREEN_HEIGHT) {
+        if (current_mode == 2 && mouse_y >= 680 && mouse_y <= SCREEN_HEIGHT) {
             show_crt_window = 1;
             ncount = 1;
         }

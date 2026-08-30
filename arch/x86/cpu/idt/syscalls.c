@@ -68,7 +68,7 @@ uint32_t syscall_handler(struct registers *regs) {
         
         case SYS_WRITE: {
             if (arg1 == 1 || arg1 == 2) {
-                printk((char*)arg2, (uint8_t)arg3);
+                printk((char*)arg2, (uint32_t)arg3);
                 ret_val = 0;
             } else {
                 ret_val = -EBADF;
@@ -160,7 +160,7 @@ uint32_t syscall_handler(struct registers *regs) {
             int r_y = (int)(arg1 & 0xFFFF);
             int r_w = (int)(arg2 >> 16);
             int r_h = (int)(arg2 & 0xFFFF);
-            uint8_t r_color = (uint8_t)arg3;
+            uint32_t r_color = (uint32_t)arg3;
             draw_rect(r_x, r_y, r_w, r_h, r_color);
             
             x = 0;

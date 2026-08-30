@@ -31,8 +31,8 @@ char byte_str[16];
 int current_uid = 1; 
 const char* root_password = "102030!";
 
-int win_file_x = 296;
-int win_file_y = 244;
+int win_file_x = 424; 
+int win_file_y = 220; 
 
 void system() {
 refresh:
@@ -46,13 +46,17 @@ refresh:
         #endif
     }
 
-    draw_rect(0, 0, 1024, 40, COLOR_LIGHT_GRAY);
+    draw_rect(0, 0, 1280, 40, COLOR_LIGHT_GRAY);
 
     draw_button(10, 5, 56, 26, "CalcOS", COLOR_BLACK, COLOR_WHITE);
 
-    sti();
+    cli();
+
+    is_button_calc = 0;
 
     graphics();
+
+    is_button_calc = 0;
 
     while (1) {
         if (ncount == 1) goto refresh;
@@ -160,13 +164,13 @@ refresh:
                     content_clear();
                     screen_clear();
 
-                    draw_rect(0, 0, 1024, 30, COLOR_LIGHT_GRAY); 
+                    draw_rect(0, 0, 1280, 30, COLOR_LIGHT_GRAY); 
                     x = 10; y = 8;
                     print("Editing: ", COLOR_BLACK);
                     print(file_name, COLOR_BLACK); 
 
-                    draw_rect(0, 738, 1024, 30, COLOR_LIGHT_GRAY); 
-                    x = 10; y = 746;
+                    draw_rect(0, 690, 1280, 30, COLOR_LIGHT_GRAY); 
+                    x = 10; y = 698;
                     print("F2: Save and Exit", COLOR_BLACK);
 
                     x = 0; y = 40;
@@ -432,8 +436,7 @@ void boot() {
     delay_ticks(100);
 
     screen_clear();
-    init_palette();
-    draw_rect(0, 0, 1024, 768, COLOR_WHITE);
+    draw_rect(0, 0, 1280, 720, COLOR_WHITE);
 
     x = 0;
     y = 10;

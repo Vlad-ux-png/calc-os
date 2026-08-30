@@ -25,9 +25,9 @@ void task2_main() {
             get_time(&hours, &minutes);
 
             if (hours != old_hours || minutes != old_minutes) {
-                draw_rounded_rect(970, 5, 46, 30, 4, COLOR_BLACK); 
+                draw_rounded_rect(1226, 5, 46, 30, 4, COLOR_BLACK); 
 
-                x = 972; y = 15;
+                x = 1228; y = 15;
                 
                 itoa(hours, h_str);
                 if (hours < 10) print("0", COLOR_WHITE); 

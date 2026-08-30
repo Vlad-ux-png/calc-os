@@ -117,7 +117,7 @@ int sys_open(const char* path);
 int sys_read(int fd, char* buf, uint32_t count);
 uint32_t sys_time();
 void sys_uname(char *buffer);
-int sys_write(int fd, const char* str, uint8_t color);
+int sys_write(int fd, const char* str, uint32_t color);
 
 void system();
 
