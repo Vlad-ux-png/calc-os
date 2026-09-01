@@ -32,7 +32,7 @@ void stub_mouse_handler() {
     outb(0x20, 0x20); 
 }
 
-unsigned char mouse_cursor[16][16] = {
+uint8_t mouse_cursor[16][16] = {
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {1,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -74,11 +74,11 @@ void draw_cursor(int mx, int my) {
     }
 }
 
-int mouse_x = 640;
-int mouse_y = 360;
+int mouse_x = 512;
+int mouse_y = 384;
 
-int old_mouse_x = 640;
-int old_mouse_y = 360;
+int old_mouse_x = 512;
+int old_mouse_y = 384;
 int mouse_left_button = 0;
 
 uint32_t cursor_back_buffer[256];
@@ -151,8 +151,8 @@ void check_ui_clicks() {
                 
                 if (win_file_x < 0) win_file_x = 0;
                 if (win_file_y < 40) win_file_y = 40;
-                if (win_file_x > (1280 - 432)) win_file_x = 1280 - 432;
-                if (win_file_y > (720 - 260)) win_file_y = 720 - 260;
+                if (win_file_x > (1024 - 432)) win_file_x = 1024 - 432;
+                if (win_file_y > (768 - 260)) win_file_y = 768 - 260;
 
                 ncount = 1; 
             }
@@ -180,17 +180,17 @@ void check_ui_clicks() {
             }
         }
 
-        if (current_mode == 1 && mouse_x >= 480 && mouse_x <= 800 && mouse_y >= 250 && mouse_y <= 286) {
+        if (current_mode == 1 && mouse_x >= 352 && mouse_x <= 672 && mouse_y >= 250 && mouse_y <= 286) {
             current_mode = 2;
             ncount = 1;
         }
 
-        if (current_mode == 1 && mouse_x >= 480 && mouse_x <= 800 && mouse_y >= 350 && mouse_y <= 386) {
+        if (current_mode == 1 && mouse_x >= 352 && mouse_x <= 672 && mouse_y >= 350 && mouse_y <= 386) {
             current_mode = 3;
             ncount = 1;
         }
 
-        if (current_mode == 2 && mouse_y >= 680 && mouse_y <= SCREEN_HEIGHT) {
+        if (current_mode == 2 && mouse_y >= 728 && mouse_y <= SCREEN_HEIGHT) {
             show_crt_window = 1;
             ncount = 1;
         }

@@ -21,7 +21,7 @@
 #include <riscv.h>
 #endif
 
-static const uint16_t fade_palette[24] = {
+static const uint32_t fade_palette[24] = {
     COLOR_WHITE, COLOR_WHITE, COLOR_SYS_LIGHT, 
     COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, 
     COLOR_LIGHT_GRAY,  COLOR_LIGHT_GRAY, 
@@ -39,8 +39,7 @@ void draw_desktop() {
 #if defined(__riscv)
     return; 
 #else
-
-    draw_rect(0, 40, 1280, 680, COLOR_ACCENT_BLUE);
+    draw_rect(0, 40, 1024, 728, COLOR_ACCENT_BLUE);
 
     int glass_x = 60;
     int glass_y = 180;
@@ -81,14 +80,14 @@ void draw_desktop() {
             for (int v_scale = 0; v_scale < scale; v_scale++) {
                 int current_pixel_y = reflect_y + (i * scale) + v_scale;
                 
-                if (current_pixel_y >= 720 || current_pixel_y >= (glass_y + glass_h)) {
+                if (current_pixel_y >= SCREEN_HEIGHT || current_pixel_y >= (glass_y + glass_h)) {
                     continue;
                 }
 
                 int fade_index = (i * scale) + v_scale;
-                uint32_t reflect_color = (fade_index < 24) ? fade_palette[fade_index] : COLOR_ACCENT_BLUE;
+                uint32_t reflect_color = (fade_index < 24) ? fade_palette[fade_index] : 20;
 
-                uint32_t *row = &VIDEO_MEMORY[current_pixel_y * 1280];
+                uint32_t *row = &VIDEO_MEMORY[current_pixel_y * SCREEN_WIDTH];
                 unsigned char bits_copy = bits;
 
                 for (int j = 0; j < 8; j++) {
@@ -96,7 +95,7 @@ void draw_desktop() {
                         for (int h_scale = 0; h_scale < scale; h_scale++) {
                             int current_pixel_x = start_x + (j * scale) + h_scale;
                             
-                            if (current_pixel_x >= 0 && current_pixel_x < 1280) {
+                            if (current_pixel_x >= 0 && current_pixel_x < SCREEN_WIDTH) {
                                 row[current_pixel_x] = reflect_color;
                             }
                         }
@@ -106,7 +105,7 @@ void draw_desktop() {
             }
         }
     }
-    cli();
+    sti();
 #endif
 }
 
@@ -116,10 +115,10 @@ void graphics() {
     #else
     if (current_mode == 0) {
         if (draw_0 == 1) {
-            draw_rect(0, 40, 1280, 680, COLOR_BLACK);
+            draw_rect(0, 40, 1024, 728, COLOR_BLACK);
 
             if (draw_0 == 1) {
-                draw_button(78, 5, 136, 26, "Terminal", COLOR_MAGENTA, COLOR_WHITE);
+                draw_button(78, 5, 136, 26, "Terminal", COLOR_RED, COLOR_WHITE);
                 draw_button(191, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
             }
 
@@ -131,7 +130,7 @@ void graphics() {
             if (is_button_calc == 1) {
                 draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
-                draw_button(10, 31, 70, 26, "Terminal", COLOR_MAGENTA, COLOR_WHITE);
+                draw_button(10, 31, 70, 26, "Terminal", COLOR_RED, COLOR_WHITE);
                 draw_button(10, 51, 70, 26, "Explorer", COLOR_GREEN, COLOR_WHITE);
 
                 draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
@@ -156,7 +155,7 @@ void graphics() {
         }
 
         if (draw_1 == 1) {
-            draw_button(238, 5, 136, 26, "Explorer", COLOR_MAGENTA, COLOR_WHITE);
+            draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, COLOR_WHITE);
             draw_button(351, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
         }
 
@@ -164,13 +163,13 @@ void graphics() {
             draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
             draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
-            draw_button(10, 51, 70, 26, "Explorer", COLOR_MAGENTA, COLOR_WHITE);
+            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_WHITE);
 
             draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
             draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
         }
 
-        draw_button(0, 680, 1280, 40, "F2 - create a new file", COLOR_BLUE, COLOR_WHITE);
+        draw_button(0, 728, 1024, 40, "F2 - create a new file", COLOR_BLUE, COLOR_WHITE);
 
         draw_file_icons();
 
@@ -180,7 +179,20 @@ void graphics() {
             int wx = win_file_x; 
             int wy = win_file_y;
 
-            draw_crt_window(wx, wy);
+            draw_window(wx, wy, "Create a new file");
+
+            x = wx + 18;
+            y = wy + 44;
+
+            print("Name:", COLOR_WHITE);
+            draw_rect(wx + 18, wy + 58, 396, 24, COLOR_WHITE); 
+            draw_rect(wx + 20, wy + 60, 392, 20, COLOR_BLACK); 
+
+            x = wx + 18;
+            y = wy + 90;
+            print("Content:", COLOR_WHITE);
+            draw_rect(wx + 18, wy + 104, 396, 110, COLOR_WHITE); 
+            draw_rect(wx + 20, wy + 106, 392, 106, COLOR_BLACK); 
         }
 
         is_button_calc = 0;
@@ -194,7 +206,7 @@ void graphics() {
         }
 
         if (draw_1 == 1) {
-            draw_button(238, 5, 136, 26, "Explorer", COLOR_MAGENTA, COLOR_WHITE);
+            draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, COLOR_WHITE);
             draw_button(351, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
         }
 
@@ -202,7 +214,7 @@ void graphics() {
             draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
             draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
-            draw_button(10, 51, 70, 26, "Explorer", COLOR_MAGENTA, COLOR_WHITE);
+            draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_WHITE);
 
             draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
             draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
@@ -232,7 +244,7 @@ void graphics() {
             }
 
             if (draw_1 == 1) {
-                draw_button(238, 5, 136, 26, "Explorer", COLOR_MAGENTA, COLOR_WHITE);
+                draw_button(238, 5, 136, 26, "Explorer", COLOR_RED, COLOR_WHITE);
                 draw_button(351, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
             }
 
@@ -240,19 +252,19 @@ void graphics() {
                 draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
 
                 draw_button(10, 31, 70, 26, "Terminal", COLOR_GREEN, COLOR_WHITE);
-                draw_button(10, 51, 70, 26, "Explorer", COLOR_MAGENTA, COLOR_WHITE);
+                draw_button(10, 51, 70, 26, "Explorer", COLOR_RED, COLOR_WHITE);
 
                 draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
                 draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
             }
 
             if (is_button_files == 1) {
-                draw_button(480, 250, 320, 36, "Files", COLOR_MAGENTA, COLOR_BLACK);
-                draw_button(480, 350, 320, 36, "System", COLOR_GREEN, COLOR_BLACK);
+                draw_button(352, 250, 320, 36, "Files", COLOR_RED, COLOR_BLACK);
+                draw_button(352, 350, 320, 36, "System", COLOR_GREEN, COLOR_BLACK);
             }
             else if (is_button_apps == 1) {
-                draw_button(480, 250, 320, 36, "Files", COLOR_GREEN, COLOR_BLACK);
-                draw_button(480, 350, 320, 36, "System", COLOR_MAGENTA, COLOR_BLACK);
+                draw_button(352, 250, 320, 36, "Files", COLOR_GREEN, COLOR_BLACK);
+                draw_button(352, 350, 320, 36, "System", COLOR_RED, COLOR_BLACK);
             } 
         } else {
             current_mode = 0;

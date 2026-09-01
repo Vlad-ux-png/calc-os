@@ -10,8 +10,7 @@ ifeq ($(ARCH),x86)
     ASFLAGS_ELF := -f elf32
     CFLAGS      := -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore \
                -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c \
-               -fno-pic -fno-asynchronous-unwind-tables -fno-strict-aliasing -fpack-struct \
-			   -mno-sse -mstackrealign -O0
+               -fno-pic -fno-asynchronous-unwind-tables -fno-strict-aliasing -mno-sse 
 
     LDFLAGS     := -m elf_i386 -T linker.ld --nostdlib --static
 

@@ -5,8 +5,8 @@
 #define fb_address (*(volatile uint32_t*)0x0500)
 #define VIDEO_MEMORY ((uint32_t*)(uint32_t)fb_address)
 
-#define SCREEN_WIDTH  1280
-#define SCREEN_HEIGHT 720
+#define SCREEN_WIDTH  1024
+#define SCREEN_HEIGHT 768
 
 #define RGB32(r, g, b) ((uint32_t)((((r) & 0xFF) << 16) | (((g) & 0xFF) << 8) | ((b) & 0xFF)))
 
@@ -68,11 +68,10 @@ void printk(const char *msg, uint32_t color);
 void print(const char *msg, uint32_t color);
 void draw_rect(int x, int y, int width, int height, uint32_t color);
 void draw_rounded_rect(int x, int y, int width, int height, int r, uint32_t color);
-void draw_crt_window(int wx, int wy);
+void draw_window(int wx, int wy, const char *text);
 
 void update_system();
 void handle_hotkeys(int code);
-void init_palette();
 
 extern void outb( uint16_t port, uint8_t val);
 extern volatile uint8_t inb(uint16_t port);

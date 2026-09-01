@@ -179,7 +179,7 @@ void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint
     printk(_msg, text_color);
 }
 
-void draw_crt_window(int wx, int wy) {
+void draw_window(int wx, int wy, const char *text) {
     draw_rect(wx + 4, wy + 4, 432, 260, COLOR_BLACK);    
     draw_rect(wx,     wy,     432, 260, COLOR_WHITE);     
     draw_rect(wx + 4, wy + 4, 424, 252, COLOR_LIGHT_GRAY); 
@@ -188,17 +188,5 @@ void draw_crt_window(int wx, int wy) {
             
     x = wx + 18;
     y = wy + 12;
-    print("Create a new file", COLOR_WHITE);
-
-    x = wx + 18;
-    y = wy + 44;
-    print("Name:", COLOR_WHITE);
-    draw_rect(wx + 18, wy + 58, 396, 24, COLOR_WHITE); 
-    draw_rect(wx + 20, wy + 60, 392, 20, COLOR_BLACK); 
-
-    x = wx + 18;
-    y = wy + 90;
-    print("Content:", COLOR_WHITE);
-    draw_rect(wx + 18, wy + 104, 396, 110, COLOR_WHITE); 
-    draw_rect(wx + 20, wy + 106, 392, 106, COLOR_BLACK); 
+    print(text, COLOR_WHITE);
 }

@@ -116,8 +116,8 @@ void draw_file_icons() {
             if ((uint8_t)entries[i].name[0] == 0xE5) continue;
             if (entries[i].attributes == 0x0F) continue;
 
-            int col = icon_index % 7;
-            int row = icon_index / 7;
+            int col = icon_index % 6;
+            int row = icon_index / 6;
             int icon_x = 20 + col * 180;
             int icon_y = 100 + row * 100;
 
