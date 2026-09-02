@@ -123,6 +123,7 @@ init_32bit:
     mov fs, ax
     mov gs, ax
     mov esp, 0x90000
+    and esp, -16
     mov ebp, esp
 
     jmp 0x14200
