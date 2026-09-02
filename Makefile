@@ -15,7 +15,7 @@ ifeq ($(ARCH),x86)
     LDFLAGS     := -m elf_i386 -T linker.ld --nostdlib --static
 
     OBJ := init.o kernel.o cmos.o video.o mouse_asm.o utils.o keyboard.o font.o inout.o \
-           mouse.o irq_hndlr.o idt.o isr.o task.o ata.o fat.o read.o write.o \
+           mouse.o wrappers.o idt.o isr.o task.o ata.o fat.o read.o write.o \
            sound.o pci.o rtl8139.o mm.o forth.o syscalls.o sys_exit.o \
            sys_getpid.o sys_open.o sys_read.o sys_time.o sys_uname.o \
            sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
