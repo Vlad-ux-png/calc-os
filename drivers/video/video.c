@@ -32,7 +32,7 @@ void screen_clear() {
 
 	return;
 #else
-    memset(VIDEO_MEMORY, 0, (SCREEN_WIDTH * SCREEN_HEIGHT) * 4);
+    memset(VIDEO_MEMORY, 0, SCREEN_WIDTH * SCREEN_HEIGHT);
     x = 0;
     y = 0;
     ncount = 1;
@@ -40,7 +40,51 @@ void screen_clear() {
 #endif
 }
 
-void put_char(char s, uint32_t color) {
+void set_palette_color(uint8_t index, uint8_t r, uint8_t g, uint8_t b) {
+#if defined(__riscv)
+    return; 
+#else
+    outb(0x03C8, index);    
+    outb(0x03C9, r >> 2);   
+    outb(0x03C9, g >> 2);    
+    outb(0x03C9, b >> 2);   
+#endif
+}
+
+void init_palette() {
+#if defined(__riscv)
+    return; 
+#else
+    set_palette_color(0, 0, 0, 0);         
+    set_palette_color(1, 0, 0, 170);      
+    set_palette_color(2, 0, 170, 0);      
+    set_palette_color(4, 170, 0, 0);       
+    set_palette_color(7, 170, 170, 170);   
+    set_palette_color(8, 85, 85, 85);       
+    set_palette_color(14, 255, 255, 85);  
+    set_palette_color(15, 255, 255, 255);   
+
+    set_palette_color(3, 0, 170, 170);     
+    set_palette_color(5, 170, 0, 170);     
+    set_palette_color(6, 170, 85, 0);       
+    set_palette_color(9, 85, 85, 255);     
+    set_palette_color(10, 85, 255, 85);    
+    set_palette_color(11, 85, 255, 255);   
+    set_palette_color(12, 255, 85, 85);     
+    set_palette_color(13, 255, 85, 255);    
+
+    set_palette_color(16, 212, 208, 200); 
+    set_palette_color(17, 10, 24, 80);      
+    set_palette_color(18, 128, 128, 128); 
+    set_palette_color(19, 230, 230, 230);
+    
+    set_palette_color(20, 0, 120, 215);    
+    set_palette_color(21, 26, 26, 26);     
+    set_palette_color(22, 255, 165, 0);    
+#endif
+}
+
+void put_char(char s, uint8_t color) {
 #if defined(__riscv)
     uart_put_char(s);
     return;
@@ -75,7 +119,7 @@ void put_char(char s, uint32_t color) {
             unsigned char bits = font[(uint8_t)s][i];
             
             int current_y = y + (i * scale) + v_scale;
-            uint32_t *row = &VIDEO_MEMORY[current_y * SCREEN_WIDTH];
+            uint8_t *row = &VIDEO_MEMORY[current_y * SCREEN_WIDTH];
 
             for (int j = 0; j < 8; j++) {
                 if (bits & 0x80) { 
@@ -95,13 +139,13 @@ void put_char(char s, uint32_t color) {
 #endif
 }
 
-void printk(const char *msg, uint32_t color) {
+void printk(const char *msg, uint8_t color) {
 	for (int i = 0; msg[i] != 0; i++) {
 		put_char(msg[i], color);
 	}
 }
 
-void print(const char *msg, uint32_t color) {
+void print(const char *msg, uint8_t color) {
 #if defined(__riscv)
     printk(msg, color);
 #else
@@ -109,7 +153,7 @@ void print(const char *msg, uint32_t color) {
 #endif
 }
 
-void draw_rect(int x, int y, int width, int height, uint32_t color) {
+void draw_rect(int x, int y, int width, int height, uint8_t color) {
 #if defined(__riscv)
     return;
 #else
@@ -119,17 +163,14 @@ void draw_rect(int x, int y, int width, int height, uint32_t color) {
             int start_x = (x < 0) ? 0 : x;
             int end_x = (x + width > SCREEN_WIDTH) ? SCREEN_WIDTH : (x + width);
             if (end_x > start_x) {
-                uint32_t *row = &VIDEO_MEMORY[curr_y * SCREEN_WIDTH + start_x];
-                for (int px = 0; px < (end_x - start_x); px++) {
-                    row[px] = color;
-                }
+                memset(&VIDEO_MEMORY[curr_y * SCREEN_WIDTH + start_x], color, end_x - start_x);
             }
         }
     }
 #endif
 }
 
-void draw_rounded_rect(int x, int y, int width, int height, int r, uint32_t color) {
+void draw_rounded_rect(int x, int y, int width, int height, int r, uint8_t color) {
 #if defined(__riscv)
     return;
 #else
@@ -168,7 +209,7 @@ void draw_rounded_rect(int x, int y, int width, int height, int r, uint32_t colo
 #endif
 }
 
-void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint32_t color, uint32_t text_color) {
+void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint8_t color, uint8_t text_color) {
     int radius = 4;
     
     draw_rounded_rect(_x, _y, _width, _height, radius, color);
@@ -177,16 +218,4 @@ void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint
     y = _y + 4;
 
     printk(_msg, text_color);
-}
-
-void draw_window(int wx, int wy, const char *text) {
-    draw_rect(wx + 4, wy + 4, 432, 260, COLOR_BLACK);    
-    draw_rect(wx,     wy,     432, 260, COLOR_WHITE);     
-    draw_rect(wx + 4, wy + 4, 424, 252, COLOR_LIGHT_GRAY); 
-    
-    draw_rect(wx + 4, wy + 4, 424, 32, COLOR_BLACK);
-            
-    x = wx + 18;
-    y = wy + 12;
-    print(text, COLOR_WHITE);
 }

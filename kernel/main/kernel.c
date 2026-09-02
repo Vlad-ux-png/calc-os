@@ -46,13 +46,11 @@ refresh:
         #endif
     }
 
-    is_button_calc = 0;
-
     draw_rect(0, 0, 1024, 40, COLOR_LIGHT_GRAY);
 
     draw_button(10, 5, 56, 26, "CalcOS", COLOR_BLACK, COLOR_WHITE);
 
-    sti();
+    cli();
 
     graphics();
 
@@ -360,11 +358,11 @@ refresh:
                 int wy = win_file_y;
 
                 x = wx + 26;
-                y = wy + 65;
+                y = wy + 60;
                 input_wait_string(name);
 
                 x = wx + 26;
-                y = wy + 110;
+                y = wy + 150;
                 input_wait_string(content);
 
                 if (ncount == 1) goto refresh;
@@ -434,6 +432,7 @@ void boot() {
     delay_ticks(100);
 
     screen_clear();
+    init_palette();
     draw_rect(0, 0, 1024, 768, COLOR_WHITE);
 
     x = 0;

@@ -57,7 +57,7 @@ setup_vbe_loop:
     jne next_mode
     cmp word [bx + 20], 768    
     jne next_mode
-    cmp byte [bx + 25], 32    
+    cmp byte [bx + 25], 8      
     jne next_mode
 
     mov eax, [bx + 40]
@@ -123,7 +123,6 @@ init_32bit:
     mov fs, ax
     mov gs, ax
     mov esp, 0x90000
-    and esp, -16
     mov ebp, esp
 
     jmp 0x14200

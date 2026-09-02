@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <idt.h>
 #include <task.h>
-#include <video.h>
 
 void init_paging();
 void enable_paging();
@@ -10,7 +9,7 @@ extern int current_mode;
 extern void screen_clear();
 
 void __attribute__((section(".text.entry"))) kernel_main() {
-	init_paging();
+    init_paging();
     enable_paging();
     
     __asm__ __volatile__("cli");

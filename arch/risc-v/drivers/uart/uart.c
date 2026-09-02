@@ -15,7 +15,7 @@ void uart_printk(const char* str) {
     }
 }
 
-char uart_get_char() {
+char uart_get_char(void) {
     if ((*UART_LSR & UART_LSR_DR) == 0) {
         return 0; 
     }

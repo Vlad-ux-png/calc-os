@@ -3,7 +3,7 @@
 
 unsigned int timer_ticks = 0; 
 
-void init_timer() {
+void init_timer(void) {
     __asm__ __volatile__("csrw mtvec, %0" : : "r"(trap_vector));
 
     uint64_t current_time = *RISCV_CLINT_MTIME;
@@ -14,7 +14,7 @@ void init_timer() {
     __asm__ __volatile__("csrs mstatus, %0" : : "r"(1 << 3));
 }
 
-void timer_handler() {
+void timer_handler(void) {
     unsigned long mcause;
     __asm__ __volatile__("csrr %0, mcause" : "=r"(mcause));
 

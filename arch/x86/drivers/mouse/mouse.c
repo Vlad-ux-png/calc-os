@@ -6,33 +6,7 @@
 #include <stdint.h>
 #include <idt.h>
 
-volatile int mouse_cycle = 0;
-volatile uint8_t mouse_packet[3];
-volatile int mouse_ready = 0;
-
-void stub_mouse_handler() {
-    uint8_t status = inb(0x64);
-    
-    if ((status & 0x01) && (status & 0x20)) {
-        uint8_t data = inb(0x60);
-        
-        if (mouse_cycle == 0 && !(data & 0x08)) {
-            mouse_cycle = 0;
-        } else {
-            mouse_packet[mouse_cycle++] = data;
-            
-            if (mouse_cycle == 3) {
-                mouse_cycle = 0;
-                mouse_ready = 1;
-            }
-        }
-    }
-
-    outb(0xA0, 0x20); 
-    outb(0x20, 0x20); 
-}
-
-uint8_t mouse_cursor[16][16] = {
+unsigned char mouse_cursor[16][16] = {
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {1,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -61,12 +35,12 @@ void draw_cursor(int mx, int my) {
                 int curr_y = my + row;
 
                 if (curr_x >= 0 && curr_x < SCREEN_WIDTH && curr_y >= 0 && curr_y < SCREEN_HEIGHT) {
-                    uint32_t *ptr = &VIDEO_MEMORY[curr_y * SCREEN_WIDTH + curr_x];
+                    uint8_t *ptr = &VIDEO_MEMORY[curr_y * SCREEN_WIDTH + curr_x];
 
                     if (c == 1) {
-                        *ptr = COLOR_WHITE; 
+                        *ptr = 15; 
                     } else {
-                        *ptr = COLOR_BLACK; 
+                        *ptr = 0; 
                     }
                 }
             }
@@ -81,7 +55,7 @@ int old_mouse_x = 512;
 int old_mouse_y = 384;
 int mouse_left_button = 0;
 
-uint32_t cursor_back_buffer[256];
+uint8_t cursor_back_buffer[256];
 
 void mouse_handler() {
     if (!mouse_ready) return; 
@@ -130,37 +104,21 @@ void restore_background() {
     }
 }
 
-int grab_offset_x = 0;
-int grab_offset_y = 0;
-int is_dragging = 0;
-
 void check_ui_clicks() {
-    if (current_mode == 2) {
-        if (mouse_left_button == 1) {
-            if (!is_dragging && mouse_x >= win_file_x && mouse_x <= (win_file_x + 432) && 
-                mouse_y >= win_file_y && mouse_y <= (win_file_y + 32)) {
-                
-                is_dragging = 1;
-                grab_offset_x = mouse_x - win_file_x;
-                grab_offset_y = mouse_y - win_file_y;
-            }
+    if (current_mode == 2 && mouse_left_button == 1) {
+        if (mouse_x >= win_file_x && mouse_x <= (win_file_x + 432) && mouse_y >= win_file_y && mouse_y <= (win_file_y + 32)) {
             
-            if (is_dragging) {
-                win_file_x = mouse_x - grab_offset_x;
-                win_file_y = mouse_y - grab_offset_y;
-                
-                if (win_file_x < 0) win_file_x = 0;
-                if (win_file_y < 40) win_file_y = 40;
-                if (win_file_x > (1024 - 432)) win_file_x = 1024 - 432;
-                if (win_file_y > (768 - 260)) win_file_y = 768 - 260;
+            win_file_x = mouse_x - 200;
+            win_file_y = mouse_y - 16;
+            
+            if (win_file_x < 0) win_file_x = 0;
+            if (win_file_y < 40) win_file_y = 40;
+            if (win_file_x > (1024 - 432)) win_file_x = 1024 - 432;
+            if (win_file_y > (768 - 260)) win_file_y = 768 - 260;
 
-                ncount = 1; 
-            }
-        } else {
-            is_dragging = 0;
+            ncount = 1; 
         }
     }
-    
     if (mouse_left_button == 1) {
         if (mouse_x >= 238 && mouse_x <= 374 && mouse_y >= 5 && mouse_y <= 31) {
             is_scaled = 0;
@@ -197,7 +155,7 @@ void check_ui_clicks() {
 
         if (mouse_x >= 10 && mouse_x <= 66 && mouse_y >= 5 && mouse_y <= 31) {
             is_scaled = 0;
-            is_button_calc = !is_button_calc;
+            is_button_calc = 1;
             ncount = 1;
         }
 

@@ -10,17 +10,17 @@ ifeq ($(ARCH),x86)
     ASFLAGS_ELF := -f elf32
     CFLAGS      := -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore \
                -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c \
-               -fno-pic -fno-asynchronous-unwind-tables -fno-strict-aliasing -mno-sse 
-
+               -fno-pic -fno-asynchronous-unwind-tables -fno-strict-aliasing -fpack-struct \
+			   -mno-sse 
     LDFLAGS     := -m elf_i386 -T linker.ld --nostdlib --static
 
     OBJ := init.o kernel.o cmos.o video.o mouse_asm.o utils.o keyboard.o font.o inout.o \
-           mouse.o isr.o idt.o faults.o task.o ata.o fat.o read.o write.o \
+           mouse.o irq_hndlr.o idt.o isr.o task.o ata.o fat.o read.o write.o \
            sound.o pci.o rtl8139.o mm.o forth.o syscalls.o sys_exit.o \
            sys_getpid.o sys_open.o sys_read.o sys_time.o sys_uname.o \
            sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
            casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
-           keyboard2.o timer2.o fault.o
+           keyboard2.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -43,7 +43,7 @@ vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/task
           arch/x86/drivers/pci arch/x86/drivers/rtl8139 fs/vfs \
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
 		  drivers/keybrd  arch/risc-v/drivers/pci drivers/keybrd arch/risc-v/cpu/timer fs \
-          arch/x86/drivers/keyboard arch/x86/cpu/timer
+          arch/x86/drivers/keyboard 
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot 

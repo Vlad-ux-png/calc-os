@@ -25,9 +25,6 @@ typedef struct {
 extern Task task_list[4];
 extern int current_task;
 
-extern unsigned int task2_stack[1024]; 
-extern unsigned int task4_stack[2048]; 
-
 void send_signal(int target_task_id, int signum);
 void check_signals(int current_task_id, uint32_t* registers_on_stack);
 

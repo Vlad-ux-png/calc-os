@@ -21,7 +21,7 @@
 #include <riscv.h>
 #endif
 
-static const uint32_t fade_palette[24] = {
+static const uint8_t fade_palette[24] = {
     COLOR_WHITE, COLOR_WHITE, COLOR_SYS_LIGHT, 
     COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, 
     COLOR_LIGHT_GRAY,  COLOR_LIGHT_GRAY, 
@@ -85,9 +85,9 @@ void draw_desktop() {
                 }
 
                 int fade_index = (i * scale) + v_scale;
-                uint32_t reflect_color = (fade_index < 24) ? fade_palette[fade_index] : 20;
+                uint8_t reflect_color = (fade_index < 24) ? fade_palette[fade_index] : 20;
 
-                uint32_t *row = &VIDEO_MEMORY[current_pixel_y * SCREEN_WIDTH];
+                uint8_t *row = &VIDEO_MEMORY[current_pixel_y * SCREEN_WIDTH];
                 unsigned char bits_copy = bits;
 
                 for (int j = 0; j < 8; j++) {
@@ -105,7 +105,7 @@ void draw_desktop() {
             }
         }
     }
-    sti();
+    cli();
 #endif
 }
 
@@ -144,7 +144,6 @@ void graphics() {
             current_mode = 5;
             ncount = 1;
         }
-        is_button_calc = 0;
     }
     else if (current_mode == 2) {
         draw_desktop();
@@ -179,23 +178,27 @@ void graphics() {
             int wx = win_file_x; 
             int wy = win_file_y;
 
-            draw_window(wx, wy, "Create a new file");
+            draw_rect(wx + 4, wy + 4, 432, 260, COLOR_BLACK);
+            draw_rect(wx,     wy,     432, 260, COLOR_WHITE);
+            draw_rect(wx + 4, wy + 4, 424, 252, COLOR_LIGHT_GRAY);
+            draw_rect(wx + 4, wy + 4, 424, 32, COLOR_BLACK);
+
+            x = wx + 18;
+            y = wy + 8;
+            print("Create a new file", COLOR_WHITE);
 
             x = wx + 18;
             y = wy + 44;
-
             print("Name:", COLOR_WHITE);
-            draw_rect(wx + 18, wy + 58, 396, 24, COLOR_WHITE); 
-            draw_rect(wx + 20, wy + 60, 392, 20, COLOR_BLACK); 
+            draw_rect(wx + 18, wy + 56, 404, 24, COLOR_WHITE);
+            draw_rect(wx + 20, wy + 58, 400, 20, COLOR_BLACK);
 
             x = wx + 18;
-            y = wy + 90;
+            y = wy + 94;
             print("Content:", COLOR_WHITE);
-            draw_rect(wx + 18, wy + 104, 396, 110, COLOR_WHITE); 
-            draw_rect(wx + 20, wy + 106, 392, 106, COLOR_BLACK); 
+            draw_rect(wx + 18, wy + 146, 404, 24, COLOR_WHITE); 
+            draw_rect(wx + 20, wy + 148, 400, 20, COLOR_BLACK);
         }
-
-        is_button_calc = 0;
     }
     else if (current_mode == 3) {
         draw_desktop();
@@ -230,7 +233,6 @@ void graphics() {
         } else {
             print("BAD. Please insert a new CMOS battery\n", COLOR_WHITE);
         }
-        is_button_calc = 0;
     }
     else {
         is_scaled = 0;
